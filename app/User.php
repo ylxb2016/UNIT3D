@@ -16,6 +16,7 @@ use App\Ban;
 use App\Warning;
 use App\Peer;
 use App\History;
+use App\Bet;
 
 use Cache;
 
@@ -527,5 +528,21 @@ class User extends Authenticatable
     {
         return History::where('user_id', '=', $this->id)
             ->sum('seedtime');
+    }
+
+    /*
+    * Get all bet records for the user.
+    */
+    public function bets(){
+        return $this->hasMany(\App\Bet::class);
+    }
+
+    /*
+    * Update users BON account balance
+    */
+    public static function updateAccountBalance(Bet $bet){
+        $user = User::find(Auth::id());
+        $user->bon = $user->bon - $bet->stake;
+        $user->save();
     }
 }

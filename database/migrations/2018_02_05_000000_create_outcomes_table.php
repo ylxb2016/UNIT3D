@@ -28,7 +28,7 @@ class CreateOutcomesTable extends Migration
             $table->integer('game_id')->unsigned();
             $table->string('outcome_name');
             $table->decimal('outcome_odds', 8, 2);
-            $table->double('total_volume_pending', 10, 2);
+            $table->double('total_volume_pending', 10, 2)->nullable();
             $table->timestamps();
         });
     }

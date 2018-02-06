@@ -29,6 +29,7 @@ use App\Follow;
 use App\History;
 use App\Warning;
 use App\Note;
+use App\Bet;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Request;
@@ -396,5 +397,11 @@ class UserController extends Controller
         } else {
             abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function bets()
+    {
+        $bets = Bet::where('user_id', Auth::id())->orderBy('game_id', 'DESC')->get();
+        return view('user.bets')->with(compact('bets'));
     }
 }

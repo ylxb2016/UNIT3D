@@ -258,6 +258,16 @@ Route::group(['middleware' => 'language'], function () {
         Route::any('/notification/massread', 'NotificationController@massRead')->name('massRead_notifications');
         Route::any('/notification/delete/{id}', 'NotificationController@delete')->name('delete_notification');
         Route::any('/notification/delete', 'NotificationController@deleteAll')->name('delete_notifications');
+
+        // Betting System
+        Route::get('/bets', 'BettingController@index')->name('get_bets');
+        Route::get('/bet/{id}', 'BettingController@show')->name('show_bet');
+        Route::post('/bet/create', 'BettingController@store')->name('store_bet');
+        Route::post('games/winner', 'GamesController@declareWinner')->name('set_winner');
+        Route::get('/games', 'GamesController@index')->name('get_games');
+        Route::get('/game/{id}', 'GamesController@show')->name('show_game');
+        Route::post('/game/create', 'GamesController@store')->name('store_game');
+        Route::get('/{username}.{id}/bets', 'UserController@bets')->name('user_bets');
     });
 
 /*

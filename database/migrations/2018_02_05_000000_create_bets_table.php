@@ -34,9 +34,6 @@ class CreateBetsTable extends Migration
             $table->double('pending_amount', 10, 2);
             $table->string('status')->default('active');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('game_id')->references('id')->on('games');
         });
     }
 

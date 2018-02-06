@@ -28,7 +28,7 @@ class CreateGamesTable extends Migration
             $table->string('game_name');
             $table->dateTime('game_start_time');
             $table->string('status')->default('active');
-            $table->integer('winning_outcome_id')->unsigned();
+            $table->integer('winning_outcome_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
