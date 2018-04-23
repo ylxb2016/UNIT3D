@@ -18,20 +18,16 @@
 <link rel="shortcut icon" href="{{ url('/favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url('/favicon.ico') }}" type="image/x-icon">
 
-<link rel="stylesheet" href="{{ url('css/vendor/vendor.min.css?v=05') }}"/>
-<link rel="stylesheet" href="{{ url('css/nav/hoe.css?v=07') }}">
-<link rel="stylesheet" href="{{ url('css/main/custom.css?v=56') }}">
+<link rel="stylesheet" href="{{ url('css/app.css') }}"/>
+
 @if(auth()->user()->style == 1)
-    <link rel="stylesheet" href="{{ url('css/main/dark.css?v=03') }}">
+    <link rel="stylesheet" href="{{ url('css/themes/dark.css') }}">
 @elseif(auth()->user()->style == 2)
-    <link rel="stylesheet" href="{{ url('css/main/blur.css?v=02') }}">
+    <link rel="stylesheet" href="{{ url('css/themes/blur.css') }}">
 @elseif(auth()->user()->style == 3)
-    <link rel="stylesheet" href="{{ url('css/main/advbuttons.css?v=04') }}">
-    <link rel="stylesheet" href="{{ url('css/main/galactic.css?v=02') }}">
+    <link rel="stylesheet" href="{{ url('css/themes/galactic.css') }}">
 @endif
-@if(auth()->user()->style != 3)
-    <link rel="stylesheet" href="{{ url('css/main/advbuttons.css?v=03') }}">
-@endif
+
 @if(isset(auth()->user()->custom_css))
     <link rel="stylesheet" href="{{auth()->user()->custom_css}}"/>
 @endif

@@ -1,4 +1,4 @@
-/*! WysiBB v1.5.1 2014-03-26
+/*! WysiBB v1.5.1 2014-03-26 
     Author: Vadim Dobroskok
  */
 if (typeof (WBBLANG)=="undefined") {WBBLANG = {};}
@@ -33,39 +33,39 @@ WBBLANG['en'] = CURLANG = {
 	video: "Insert YouTube",
 	removeFormat:"Remove Format",
 
-	modal_link_title: "Insert link",
+  modal_link_title: "Insert link",
 	modal_link_text: "Display text",
 	modal_link_url: "URL",
 	modal_email_text: "Display email",
 	modal_email_url: "Email",
 	modal_link_tab1: "Insert URL",
 
-	modal_img_title: "Insert image",
+  modal_img_title: "Insert image",
 	modal_img_tab1: "Insert URL",
 	modal_img_tab2: "Upload image",
 	modal_imgsrc_text: "Enter image URL",
 	modal_img_btn: "Choose file",
 	add_attach: "Add Attachment",
 
-	modal_video_text: "Enter the URL of the video",
+  modal_video_text: "Enter the URL of the video",
 
-	close: "Close",
+  close: "Close",
 	save: "Save",
 	cancel: "Cancel",
 	remove: "Delete",
 
-	validation_err: "The entered data is invalid",
+  validation_err: "The entered data is invalid",
 	error_onupload: "Error during file upload",
 
-	fileupload_text1: "Drop file here",
+  fileupload_text1: "Drop file here",
 	fileupload_text2: "or",
 
-	loading: "Loading",
+  loading: "Loading",
 	auto: "Auto",
 	views: "Views",
 	downloads: "Downloads",
 
-	//smiles
+  //smiles
 	sm1: "Smile",
 	sm2: "Laughter",
 	sm3: "Wink",
@@ -82,7 +82,7 @@ wbbdebug=true;
 	$.wysibb = function(txtArea,settings) {
 		$(txtArea).data("wbb",this);
 
-		if (settings && settings.deflang && typeof(WBBLANG[settings.deflang])!="undefined") {CURLANG = WBBLANG[settings.deflang];}
+    if (settings && settings.deflang && typeof(WBBLANG[settings.deflang])!="undefined") {CURLANG = WBBLANG[settings.deflang];}
 		if (settings && settings.lang && typeof(WBBLANG[settings.lang])!="undefined") {CURLANG = WBBLANG[settings.lang];}
 		this.txtArea=txtArea;
 		this.$txtArea=$(txtArea);
@@ -90,13 +90,13 @@ wbbdebug=true;
 		this.options = {
 			bbmode:				false,
 			onlyBBmode:			false,
-			themeName:			"default",
+      themeName: 'default',
 			bodyClass:			"",
-			lang:				"en",
+      lang: 'ru',
 			tabInsert:			true,
-			toolbar:			true,
-			//img upload config
-			imgupload:			true,
+//			toolbar:			false,
+      //img upload config
+      imgupload: false,
 			img_uploadurl:		"/iupload.php",
 			img_maxwidth:		800,
 			img_maxheight:		800,
@@ -109,8 +109,8 @@ wbbdebug=true;
 //			direction:			"ltr",
 			smileConversion:	true,
 
-			//END img upload config
-			buttons: 			"smiley,smilebox,|,bold,italic,underline,strike,sup,sub,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,quote,code,spoiler,table,removeFormat",
+      //END img upload config
+      buttons: 'bold,italic,underline,strike,sup,sub,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,quote,code,table,removeFormat',
 			allButtons: {
 				bold : {
 					title: CURLANG.bold,
@@ -233,7 +233,7 @@ wbbdebug=true;
 					buttonHTML: '<span class="fonticon ve-tlb-quote1">\uE00c</span>',
 					hotkey: 'ctrl+shift+3',
 					//subInsert: true,
-					transform : {
+          transform: {
 						'<blockquote>{SELTEXT}</blockquote>':"[quote]{SELTEXT}[/quote]"
 					}
 				},
@@ -245,14 +245,6 @@ wbbdebug=true;
 					onlyClearText: true,
 					transform : {
 						'<code>{SELTEXT}</code>':"[code]{SELTEXT}[/code]"
-					}
-				},
-				spoiler : {
-					title: CURLANG.spoiler,
-					buttonText: '[spoiler]',
-					hotkey: 'ctrl+shift+9',
-					transform : {
-						'<div class="decoda-spoiler">{SELTEXT}</div>':"[spoiler]{SELTEXT}[/spoiler]"
 					}
 				},
 				offtop : {
@@ -278,16 +270,6 @@ wbbdebug=true;
 							 #660000,#5B0F00,#783F04,#7F6000,#274E13,#0C343D,#1C4587,#073763,#20124D,#4C1130",
 					transform: {
 						'<font color="{COLOR}">{SELTEXT}</font>':'[color={COLOR}]{SELTEXT}[/color]'
-					}
-				},
-				heading: {
-					type: "select",
-					title: "heading",
-					excmd: "headingName",
-					valueBBname: "heading",
-					options: "h1,h2,h3,h4,h5,h6",
-					transform: {
-						'<"{HEADING}">{SELTEXT}</{HEADING}>':'[{HEADING}]{SELTEXT}[/{HEADING}]'
 					}
 				},
 				table: {
@@ -392,18 +374,18 @@ wbbdebug=true;
 						}
 					},
 					transform: {
-						'<iframe src="https://www.youtube.com/embed/{SRC}" width="640" height="480" frameborder="0"></iframe>':'[video="youtube"]{SRC}[/video]'
+            '<iframe src="http://www.youtube.com/embed/{SRC}" width="640" height="480" frameborder="0"></iframe>': '[video]{SRC}[/video]'
 					}
 				},
 
-				//select options
+        //select options
 				fs_verysmall: {
 					title: CURLANG.fs_verysmall,
 					buttonText: "fs1",
 					excmd: 'fontSize',
 					exvalue: "1",
 					transform: {
-						'<font size="1">{SELTEXT}</font>':'[size="10"]{SELTEXT}[/size]'
+            '<font size="1">{SELTEXT}</font>': '[size=50]{SELTEXT}[/size]'
 					}
 				},
 				fs_small: {
@@ -412,7 +394,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "2",
 					transform: {
-						'<font size="2">{SELTEXT}</font>':'[size="15"]{SELTEXT}[/size]'
+            '<font size="2">{SELTEXT}</font>': '[size=85]{SELTEXT}[/size]'
 					}
 				},
 				fs_normal: {
@@ -421,7 +403,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "3",
 					transform: {
-						'<font size="3">{SELTEXT}</font>':'[size="20"]{SELTEXT}[/size]'
+            '<font size="3">{SELTEXT}</font>': '[size=100]{SELTEXT}[/size]'
 					}
 				},
 				fs_big: {
@@ -430,7 +412,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "4",
 					transform: {
-						'<font size="4">{SELTEXT}</font>':'[size="25"]{SELTEXT}[/size]'
+            '<font size="4">{SELTEXT}</font>': '[size=150]{SELTEXT}[/size]'
 					}
 				},
 				fs_verybig: {
@@ -439,11 +421,11 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "6",
 					transform: {
-						'<font size="6">{SELTEXT}</font>':'[size="29"]{SELTEXT}[/size]'
+            '<font size="6">{SELTEXT}</font>': '[size=200]{SELTEXT}[/size]'
 					}
 				},
 
-				removeformat: {
+        removeformat: {
 					title: CURLANG.removeFormat,
 					buttonHTML: '<span class="fonticon ve-tlb-removeformat1">\uE00f</span>',
 					excmd: "removeFormat"
@@ -465,10 +447,10 @@ wbbdebug=true;
 			attrWrap: ['src','color','href'] //use becouse FF and IE change values for this attr, modify [attr] to _[attr]
 		}
 
-		//FIX for Opera. Wait while iframe loaded
+    //FIX for Opera. Wait while iframe loaded
 		this.inited=this.options.onlyBBmode;
 
-		//init css prefix, if not set
+    //init css prefix, if not set
 		if (!this.options.themePrefix) {
 			$('link').each($.proxy(function(idx, el) {
 				var sriptMatch = $(el).get(0).href.match(/(.*\/)(.*)\/wbbtheme\.css.*$/);
@@ -479,7 +461,7 @@ wbbdebug=true;
 			},this));
 		}
 
-		//check for preset
+    //check for preset
 		if (typeof(WBBPRESET)!="undefined") {
 			if (WBBPRESET.allButtons) {
 				//clear transform
@@ -490,8 +472,8 @@ wbbdebug=true;
 				},this));
 			}
 			$.extend(true,this.options,WBBPRESET);
-		}
-
+    }
+		
 		if (settings && settings.allButtons) {
 			$.each(settings.allButtons,$.proxy(function(k,v) {
 				if (v.transform && this.options.allButtons[k]) {
@@ -503,28 +485,28 @@ wbbdebug=true;
 		this.init();
 	}
 
-	$.wysibb.prototype = {
+  $.wysibb.prototype = {
 		lastid : 1,
 		init:	function() {
 			$.log("Init",this);
 			//check for mobile
 			this.isMobile = function(a) {(/android|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|meego.+mobile|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a))}(navigator.userAgent||navigator.vendor||window.opera);
 
-			//use bbmode on mobile devices
+      //use bbmode on mobile devices
 			//this.isMobile = true; //TEMP
 			if (this.options.onlyBBmode===true) {this.options.bbmode=true;}
 			//create array of controls, for queryState
 			this.controllers = [];
 
-			//convert button string to array
+      //convert button string to array
 			this.options.buttons = this.options.buttons.toLowerCase();
 			this.options.buttons = this.options.buttons.split(",");
 
-			//init system transforms
+      //init system transforms
 			this.options.allButtons["_systr"] = {};
 			this.options.allButtons["_systr"]["transform"]= this.options.systr;
 
-			this.smileFind();
+      this.smileFind();
 			this.initTransforms();
 			this.build();
 			this.initModal();
@@ -532,19 +514,19 @@ wbbdebug=true;
 				this.initHotkeys();
 			}
 
-			//sort smiles
+      //sort smiles
 			if (this.options.smileList && this.options.smileList.length>0) {
 				this.options.smileList.sort(function(a,b) {
 					return (b.bbcode.length-a.bbcode.length);
 				})
 			}
 
-			this.$txtArea.parents("form").bind("submit",$.proxy(function() {
+      this.$txtArea.parents("form").bind("submit",$.proxy(function() {
 				this.sync();
 				return true;
-			},this));
-
-
+      }, this));
+			
+			
 			//phpbb2
 			this.$txtArea.parents("form").find("input[id*='preview'],input[id*='submit'],input[class*='preview'],input[class*='submit'],input[name*='preview'],input[name*='submit']").bind("mousedown",$.proxy(function() {
 				this.sync();
@@ -556,13 +538,13 @@ wbbdebug=true;
 			},this));
 			//end phpbb2
 
-			if (this.options.initCallback) {
+      if (this.options.initCallback) {
 				this.options.initCallback.call(this);
 			}
 
-			$.log(this);
+      $.log(this);
 
-		},
+    },
 		initTransforms: function() {
 			$.log("Create rules for transform HTML=>BB");
 			var o = this.options;
@@ -571,21 +553,21 @@ wbbdebug=true;
 			if (!o.groups) {o.groups={};} //use for groupkey, For example: justifyleft,justifyright,justifycenter. It is must replace each other.
 			var  btnlist = o.buttons.slice();
 
-			//add system transform
+      //add system transform
 			btnlist.push("_systr");
 			for (var bidx=0; bidx<btnlist.length; bidx++) {
 				var ob = o.allButtons[btnlist[bidx]];
 				if (!ob ) {continue;}
 				ob.en=true;
 
-				//check for simplebbcode
+        //check for simplebbcode
 				if (ob.simplebbcode && $.isArray(ob.simplebbcode) && ob.simplebbcode.length==2) {
 					ob.bbcode = ob.html = ob.simplebbcode[0]+"{SELTEXT}"+ob.simplebbcode[1];
 					if (ob.transform) delete ob.transform;
 					if (ob.modal)  delete ob.modal;
 				}
 
-				//add transforms to option list
+        //add transforms to option list
 				if (ob.type=="select" && typeof(ob.options)=="string") {
 					var olist = ob.options.split(",");
 					$.each(olist,function(i,op) {
@@ -597,36 +579,34 @@ wbbdebug=true;
 				if (ob.transform && ob.skipRules!==true) {
 					var obtr = $.extend({},ob.transform);
 
-					/* if (ob.addWrap) {
-						//addWrap
-						$.log("needWrap");
-						for (var bhtml in obtr) {
-							var bbcode = ob.transform[bhtml];
-							var newhtml = '<span wbb="'+btnlist[bidx]+'">'+bhtml+'</span>';
-							obtr[newhtml] = bbcode;
-						}
-					} */
+          /* if (ob.addWrap) {
+            //addWrap
+            $.log("needWrap");
+            for (var bhtml in obtr) {
+              var bbcode = ob.transform[bhtml];
+              var newhtml = '<span wbb="'+btnlist[bidx]+'">'+bhtml+'</span>';
+              obtr[newhtml] = bbcode;
+            }
+          } */
 
-					for (var bhtml in obtr) {
+          for (var bhtml in obtr) {
 						var orightml = bhtml;
 						var bbcode = obtr[bhtml];
 
-						//create root selector for isContain bbmode
+            //create root selector for isContain bbmode
 						if (!ob.bbSelector) {ob.bbSelector=[];}
 						if ($.inArray(bbcode,ob.bbSelector)==-1) {
 							ob.bbSelector.push(bbcode);
 						}
 						if (this.options.onlyBBmode===false) {
 
-							//wrap attributes
+              //wrap attributes
 							bhtml = this.wrapAttrs(bhtml);
 
-
-							var $bel = $(document.createElement('DIV')).append($(this.elFromString(bhtml,document)));
+              var $bel = $(document.createElement('DIV')).append($(this.elFromString(bhtml,document)));
 							var rootSelector = this.filterByNode($bel.children());
 
-
-							//check if current rootSelector is exist, create unique selector for each transform (1.2.2)
+              //check if current rootSelector is exist, create unique selector for each transform (1.2.2)
 							if (rootSelector=="div" || typeof(o.rules[rootSelector])!="undefined") {
 								//create unique selector
 								$.log("create unique selector: "+rootSelector);
@@ -638,38 +618,37 @@ wbbdebug=true;
 								nhtml2 = this.unwrapAttrs(nhtml2);
 								var obhtml = this.unwrapAttrs(bhtml);
 
-
-								ob.transform[nhtml2]=bbcode;
+                ob.transform[nhtml2]=bbcode;
 								delete ob.transform[obhtml];
 
-								bhtml=nhtml2;
+                bhtml=nhtml2;
 								orightml = nhtml2;
 							}
 
-							//create root selector for isContain
+              //create root selector for isContain
 							if (!ob.excmd) {
 								if (!ob.rootSelector) {ob.rootSelector=[];}
 								ob.rootSelector.push(rootSelector);
 							}
 
-							//check for rules on this rootSeletor
+              //check for rules on this rootSeletor
 							if (typeof(o.rules[rootSelector])=="undefined") {
 								o.rules[rootSelector]=[];
 							}
 							var crules={};
 
-							if (bhtml.match(/\{\S+?\}/)) {
+              if (bhtml.match(/\{\S+?\}/)) {
 								$bel.find('*').each($.proxy(function(idx,el) {
 									//check attributes
 
-									var attributes = this.getAttributeList(el);
+                  var attributes = this.getAttributeList(el);
 									$.each(attributes,$.proxy(function(i, item) {
 										var attr = $(el).attr(item);
 										if (item.substr(0,1)=='_') {
 											item = item.substr(1);
 										}
 
-										var r = attr.match(/\{\S+?\}/g);
+                    var r = attr.match(/\{\S+?\}/g);
 										if (r) {
 											for (var a=0; a<r.length; a++) {
 												var rname = r[a].substr(1,r[a].length-2);
@@ -681,7 +660,7 @@ wbbdebug=true;
 										}
 									},this));
 
-									//check for text
+                  //check for text
 									var  sl=[];
 									if (!$(el).is("iframe")) {
 										$(el).contents().filter(function() {return this.nodeType===3}).each($.proxy(function(i,rel) {
@@ -689,7 +668,7 @@ wbbdebug=true;
 											if (typeof(txt)=="undefined") {return true;}
 											var r = txt.match(/\{\S+?\}/g)
 											if (r) {
-												for (var a=0; a<r.length; a++) {
+                        for (var a = 0; a < r.length; a++) {
 													var rname = r[a].substr(1,r[a].length-2);
 														rname = rname.replace(this.getValidationRGX(rname),"");
 													var p = this.relFilterByNode(el,rootSelector);
@@ -2565,7 +2544,7 @@ wbbdebug=true;
 			}
 		},
 
-		//MODAL WINDOW
+    //MODAL WINDOW
 		showModal: function(cmd,opt,queryState) {
 			$.log("showModal: "+cmd);
 			this.saveRange();
@@ -2580,7 +2559,7 @@ wbbdebug=true;
 					if (i==0) {row['on']="on"}
 					$ul.append(this.strf('<li class="{on}" onClick="$(this).parent().find(\'.on\').removeClass(\'on\');$(this).addClass(\'on\');$(this).parents(\'.wbbm-content\').find(\'.tab-cont\').hide();$(this).parents(\'.wbbm-content\').find(\'.tab'+i+'\').show()">{title}</li>',row));
 
-				},this))
+        },this))
 			}
 			if (opt.width) {
 				$wbbm.css("width",opt.width);
@@ -2593,7 +2572,7 @@ wbbdebug=true;
 			}
 			$.each(opt.tabs,$.proxy(function(i,r) {
 				var $c = $('<div>').addClass("tab-cont tab"+i).attr("tid",i).appendTo($cnt);
-				if (i>0) {$c.hide();}
+        if (i > 0) {$c.hide()}
 				if (r.html) {
 					$c.html(this.strf(r.html,this.options));
 				}else{
@@ -2613,20 +2592,19 @@ wbbdebug=true;
 							$c.append(this.strf('<div class="wbbm-inp-row"><label>{title}</label><input class="inp-text modal-text" type="text" name="{param}" value="{value}"/></div>',inp));
 						}
 
-
-					},this));
+          },this));
 				}
 			},this));
 
-			//this.lastRange=this.getRange();
+      //this.lastRange=this.getRange();
 
-			if ($.isFunction(opt.onLoad)) {
+      if ($.isFunction(opt.onLoad)) {
 				opt.onLoad.call(this,cmd,opt,queryState);
 			}
 
-			$wbbm.find('#wbbm-submit').click($.proxy(function() {
+      $wbbm.find('#wbbm-submit').click($.proxy(function() {
 
-				if ($.isFunction(opt.onSubmit)) { //custom submit function, if return false, then don't process our function
+        if ($.isFunction(opt.onSubmit)) { //custom submit function, if return false, then don't process our function
 					var r = opt.onSubmit.call(this,cmd,opt,queryState);
 					if (r===false) {return;}
 				}
@@ -2663,7 +2641,7 @@ wbbdebug=true;
 					this.wbbInsertCallback(cmd,params);
 					//END insert callback
 
-					this.closeModal();
+          this.closeModal();
 					this.updateUI();
 				}
 			},this));
@@ -2675,12 +2653,12 @@ wbbdebug=true;
 				this.updateUI();
 			},this));
 
-			$(document.body).css("overflow","hidden"); //lock the screen, remove scroll on body
+      $(document.body).css("overflow","hidden"); //lock the screen, remove scroll on body
 			if ($("body").height() > $(window).height()) { //if body has scroll, add padding-right 18px
 				$(document.body).css("padding-right","18px");
 			}
 			this.$modal.show();
-			//if (window.getSelection)
+      //if (window.getSelection)
 			if (this.isMobile) {
 				$wbbm.css("margin-top","10px");
 			}else{
@@ -2740,8 +2718,7 @@ wbbdebug=true;
 			return params;
 		},
 
-
-		//imgUploader
+    //imgUploader
 		imgLoadModal: function() {
 			$.log("imgLoadModal");
 			if (this.options.imgupload===true) {
@@ -2756,19 +2733,19 @@ wbbdebug=true;
 					success: $.proxy(function(data) {
 						this.$txtArea.insertImage(data.image_link,data.thumb_link);
 
-						this.closeModal();
+            this.closeModal();
 						this.updateUI();
 					},this)
 				});
 
-				this.$modal.find("#fileupl").bind("change",function() {
+        this.$modal.find("#fileupl").bind("change",function() {
 					$("#fupform").submit();
 				});
 				this.$modal.find("#fupform").bind("submit",$.proxy(function(e) {
 					$(e.target).parents("#imguploader").hide().after('<div class="loader"><img src="'+this.options.themePrefix+'/'+this.options.themeName+'/img/loader.gif" /><br/><span>'+CURLANG.loading+'</span></div>').parent().css("text-align","center");
 				},this))
 
-			}else{
+      }else{
 				this.$modal.find(".hastabs").removeClass("hastabs");
 				this.$modal.find("#imguploader").parents(".tab-cont").remove();
 				this.$modal.find(".wbbm-tablist").remove();
@@ -2792,13 +2769,13 @@ wbbdebug=true;
 				if (typeof(console)!="undefined") {
 					console.log((time-this.startTime)+" ms: "+msg);
 				}else{
-					$("#exlog").append('<p>'+(time-this.startTime)+" ms: "+msg+'</p>');
+          $('#exlog').append('<p>' + (time - this.startTime) + ' ms: ' + msg + '</p>')
 				}
 				this.startTime=time;
 			}
 		},
 
-		//Browser fixes
+    //Browser fixes
 		isChrome: function() {
 			return (window.chrome) ? true:false;
 		},
@@ -2812,12 +2789,12 @@ wbbdebug=true;
 		}
 	}
 
-	$.log = function(msg) {
+  $.log = function(msg) {
 		if (typeof(wbbdebug)!="undefined" && wbbdebug===true) {
 			if (typeof(console)!="undefined") {
 				console.log(msg);
 			}else{
-				$("#exlog").append('<p>'+msg+'</p>');
+        $('#exlog').append('<p>' + msg + '</p>')
 			}
 		}
 	}
@@ -2874,12 +2851,11 @@ wbbdebug=true;
 			}
 		};
 
-
-		$(this).bind("mousedown",opt.scope.drag_mousedown);
+    $(this).bind("mousedown",opt.scope.drag_mousedown);
 		$(document).bind("mouseup",$.proxy(opt.scope.drag_mouseup,this));
 	},
 
-	//API
+    //API
 	$.fn.getDoc = function() {
 		return this.data('wbb').doc;
 	}
@@ -2943,8 +2919,7 @@ wbbdebug=true;
 		this.data("wbb").destroy();
 	}
 
-
-	$.fn.queryState = function(command) {
+  $.fn.queryState = function(command) {
 		return this.data("wbb").queryState(command);
 	}
 })(jQuery);
@@ -2954,45 +2929,45 @@ wbbdebug=true;
 (function($) {
 	'use strict';
 
-	$.fn.dragfileupload = function(options) {
-		return this.each(function() {
+  $.fn.dragfileupload = function (options) {
+    return this.each(function () {
 			var upl = new FileUpload(this, options);
 			upl.init();
 		});
-	};
-
+  };
+	
 	function FileUpload(e, options) {
 		this.$block=$(e);
 
-		this.opt = $.extend({
+    this.opt = $.extend({
 			url: false,
 			success: false,
 			extraParams: false,
 			fileParam: 'img',
 			validation: '\.(jpg|png|gif|jpeg)$',
 
-			t1: CURLANG.fileupload_text1,
+      t1: CURLANG.fileupload_text1,
 			t2: CURLANG.fileupload_text2
 		},options);
 	}
 
-	FileUpload.prototype = {
+  FileUpload.prototype = {
 		init: function() {
 			if (window.FormData != null) {
 				this.$block.addClass("drag");
 				this.$block.prepend('<div class="p2">'+this.opt.t2+'</div>');
 				this.$block.prepend('<div class="p">'+this.opt.t1+'</div>');
 
-				this.$block.bind('dragover', function() {$(this).addClass('dragover');return false;});
+        this.$block.bind('dragover', function() {$(this).addClass('dragover');return false;});
 				this.$block.bind('dragleave', function() {$(this).removeClass('dragover');return false;});
 
-				//upload progress
-				var uploadProgress = $.proxy(function(e) {
+        //upload progress
+        var uploadProgress = $.proxy(function (e) {
 					var p = parseInt(e.loaded/e.total*100, 10);
 					this.$loader.children("span").text(CURLANG.loading+': '+ p+'%');
 
-				}, this);
-				var xhr = jQuery.ajaxSettings.xhr();
+        }, this);
+        var xhr = jQuery.ajaxSettings.xhr()
 				if (xhr.upload) {
 					xhr.upload.addEventListener('progress', uploadProgress, false);
 				}
@@ -3007,16 +2982,16 @@ wbbdebug=true;
 					var fData = new FormData();
 					fData.append(this.opt.fileParam, ufile);
 
-					if (this.opt.extraParams) { //check for extraParams to upload
+          if (this.opt.extraParams) { //check for extraParams to upload
 						$.each(this.opt.extraParams,function(k,v) {
 							fData.append(k, v);
 						});
 					}
 
-					this.$loader = $('<div class="loader"><img src="'+this.opt.themePrefix+'/'+this.opt.themeName+'/img/loader.gif" /><br/><span>'+CURLANG.loading+'</span></div>');
+          this.$loader = $('<div class="loader"><img src="'+this.opt.themePrefix+'/'+this.opt.themeName+'/img/loader.gif" /><br/><span>'+CURLANG.loading+'</span></div>');
 					this.$block.html(this.$loader);
 
-					$.ajax({
+          $.ajax({
 						type: 'POST',
 						url: this.opt.url,
 						data: fData,
@@ -3026,7 +3001,7 @@ wbbdebug=true;
 						dataType: 'json',
 						success: $.proxy(function(data) {
 							if (data && data.status==1) {
-								this.opt.success(data);
+                this.opt.success(data)
 							}else{
 								this.error(data.msg || CURLANG.error_onupload);
 							}
@@ -3035,7 +3010,7 @@ wbbdebug=true;
 					});
 				},this);
 
-			}
+      }
 		},
 		error: function(msg) {
 			this.$block.find(".upl-error").remove().end().append('<span class="upl-error">'+msg+'</span>').addClass("wbbm-brdred");

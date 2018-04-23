@@ -12,8 +12,6 @@
     font-style: normal;
 }
 
-
-
 html{height:100% !important;}
 
 /* RESPONSIBLE */
@@ -21,14 +19,7 @@ html{height:100% !important;}
 	border:1px solid #ddd;
 	position:relative;
 	background:#fff;
-	/* font-size:12px; */
-  font-size: 100%;
-}
-
-.wbbquote {
-  padding: 15px;
-  border-left: 3px solid #00b6bb;
-  color: #777777;
+    font-size: 12px;
 }
 
 .wysibb button:focus,.wysibb button:active,#wbbmodal button:focus, #wbbmodal button:active{
@@ -179,8 +170,6 @@ html{height:100% !important;}
   display:block;
   text-transform:uppercase;
 }
-
-
 
 .ve-tlb-bold{background:url(./img/icons.png) 0 0 no-repeat;width:20px;}
 .ve-tlb-italic{background:url(./img/icons.png) 0 -40px no-repeat;width:20px;}
@@ -455,7 +444,6 @@ html{height:100% !important;}
   border: 1px solid #bbb;
   box-shadow:0px 0px 5px #333;
   overflow:auto;
-  color: #111;
 }
 #wbbmodal  .wbbm-title{
   color:#333;
@@ -516,17 +504,14 @@ html{height:100% !important;}
   min-height:50px;
   max-height:100%;
 }
+
 #wbbmodal .div-modal-text{
-    display: block;
-    height: 34px;
-    padding: 2px 5px;
-    line-height: 1.42857143;
-    font-size: 14px;
-    width: 100%;
     border: 1px solid #aaa;
-    outline: none;
-    box-sizing: border-box;
-    border-radius: 0;
+    padding: 2px 5px;
+    line-height: 28px;
+    max-height: 100px;
+    overflow: auto;
+    font-size: 14px;
 }
 #wbbmodal  .wbbm-bottom{
 
@@ -547,7 +532,7 @@ html{height:100% !important;}
   border:1px solid #357ebd;
   border-radius:0px;
 
-  cursor:pointer;
+    cursor:pointer;
 }
 #wbbmodal .wbb-button:hover{
   background:#3276b1;
@@ -720,7 +705,7 @@ html{height:100% !important;}
 	  display:inline-block;
 	}
 
-	.wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn {
+    .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn {
 	  display:inline-block;
 	  height:32px;
 	  min-width:28px;
@@ -753,7 +738,7 @@ html{height:100% !important;}
 	  display:block;
 	}
 
-	.wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list{
+    .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list{
 	  display:none;
 	  position:absolute;
 	  top:32px;
@@ -767,7 +752,7 @@ html{height:100% !important;}
 	  z-index:1000;
 	}
 
-	.wbb-list .sc{
+    .wbb-list .sc{
 	  width: 16px;
 	  height: 16px;
 	  margin: 0 0 1px 1px;
@@ -776,6 +761,6 @@ html{height:100% !important;}
 	  border:1px solid #fff;
 	}
 
-	.ve-tlb-colorpick{width:24px;height:24px;line-height:24px;text-align:right;}
+    .ve-tlb-colorpick{width:24px;height:24px;line-height:24px;text-align:right;}
 	.wysibb .bottom-resize-line{display:block;height:5px;cursor:ns-resize;}
 }

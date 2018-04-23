@@ -448,8 +448,8 @@
                                 <br>
                                 <br>
                                 <center>
-                                    <button class="show_hide btn btn-labeled btn-primary" href="#">
-                                        <span class="btn-label">@emojione(':poop:')</span>{{ strtoupper(trans('torrent.original-output')) }}
+                                    <button class="show_hide btn btn-primary" href="#">
+                                        @emojione(':poop:') {{ strtoupper(trans('torrent.original-output')) }}
                                     </button>
                                 </center>
                                 <div class="slidingDiv">
@@ -511,39 +511,53 @@
         </div>
         <!-- /Info-->
 
-        <div class="torrent-bottom col-md-12">
-            <center>
-        <span class="badge-user">
-        <a href="{{ route('download_check', array('slug' => $torrent->slug, 'id' => $torrent->id)) }}" role="button"
-           class="btn btn-labeled btn-success">
-          <span class='btn-label'><i class='fa fa-download'></i></span>{{ trans('common.download') }}</a>
-        <button class="btn btn-labeled btn-primary" data-toggle="modal" data-target="#modal-10">
-          <span class='btn-label'><i class='fa fa-file'></i></span>{{ trans('common.view') }} NFO</button>
-        <a href="{{ route('comment_thanks', array('id' => $torrent->id)) }}" role="button"
-           class="btn btn-labeled btn-primary">
-          <span class='btn-label'><i class='fa fa-heart'></i></span>{{ trans('torrent.quick-comment') }}</a>
-        <a data-toggle="modal" href="#myModal" role="button" class="btn btn-labeled btn-primary">
-          <span class='btn-label'><i class='fa fa-file'></i></span>{{ trans('torrent.show-files') }}</a>
-            @if(auth()->user()->hasBookmarked($torrent->id))
-                <a href="{{ route('unbookmark', ['id' => $torrent->id]) }}" class="btn btn-labeled btn-danger"
-                   role="button">
-          <span class="btn-label"><i class="fa fa-fw fa-bookmark-o"></i></span>{{ trans('torrent.unbookmark') }}</a>
-            @else
-                <a href="{{ route('bookmark', ['id' => $torrent->id]) }}" class="btn btn-labeled btn-primary"
-                   role="button">
-          <span class="btn-label"><i class="fa fa-fw fa-bookmark-o"></i></span>{{ trans('torrent.bookmark') }}</a>
-            @endif
-            @if($torrent->seeders <= 2)
-                <a href="{{ route('reseed', array('slug' => $torrent->slug, 'id' => $torrent->id)) }}" role="button"
-                   class="btn btn-labeled btn-warning">
-          <span class='btn-label'><i class='fa fa-envelope'></i></span>{{ trans('torrent.request-reseed') }}</a>
-            @endif
-            <button class="btn btn-labeled btn-danger" data-toggle="modal" data-target="#modal_torrent_report">
-          <span class="btn-label"><i
-                      class="fa fa-fw fa-eye"></i></span>{{ trans('common.report') }} {{ strtolower(trans('torrent.torrent')) }}</button>
-      </span>
-            </center>
+        <div class="torrent-bottom col-md-12 text-center">
+            <span class="badge-user">
+
+                <a href="{{ route('download_check', array('slug' => $torrent->slug, 'id' => $torrent->id)) }}"
+                   role="button"
+                   class="btn btn-success">
+                  <i class='fa fa-download'></i> {{ trans('common.download') }}
+                </a>
+
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modal-10">
+                  <i class='fa fa-file'></i> {{ trans('common.view') }} NFO
+                </button>
+
+                <a href="{{ route('comment_thanks', array('id' => $torrent->id)) }}" role="button"
+                   class="btn btn-primary">
+                  <i class='fa fa-heart'></i> {{ trans('torrent.quick-comment') }}
+                </a>
+
+                <a data-toggle="modal" href="#myModal" role="button" class="btn btn-primary">
+                    <i class='fa fa-file'></i> {{ trans('torrent.show-files') }}
+                </a>
+
+                @if(auth()->user()->hasBookmarked($torrent->id))
+                    <a href="{{ route('unbookmark', ['id' => $torrent->id]) }}" class="btn btn-danger"
+                       role="button">
+                        <i class="fa fa-fw fa-bookmark-o"></i> {{ trans('torrent.unbookmark') }}
+                    </a>
+                @else
+                    <a href="{{ route('bookmark', ['id' => $torrent->id]) }}" class="btn btn-primary"
+                       role="button">
+                        <i class="fa fa-fw fa-bookmark-o"></i> {{ trans('torrent.bookmark') }}
+                    </a>
+                @endif
+
+                @if($torrent->seeders <= 2)
+                    <a href="{{ route('reseed', array('slug' => $torrent->slug, 'id' => $torrent->id)) }}" role="button"
+                       class="btn btn-warning">
+                        <i class='fa fa-envelope'></i> {{ trans('torrent.request-reseed') }}
+                    </a>
+                @endif
+
+                <button class="btn btn-danger" data-toggle="modal" data-target="#modal_torrent_report">
+                    <i class="fa fa-fw fa-eye"></i> {{ trans('common.report') }} {{ strtolower(trans('torrent.torrent')) }}
+                </button>
+          </span>
         </div>
+
     </div>
 
     <div class="torrent box container">
