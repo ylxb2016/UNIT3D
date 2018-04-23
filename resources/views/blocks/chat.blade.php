@@ -28,7 +28,6 @@
 <br>
 
 @section('javascripts')
-    <script type="text/javascript" src="{{ url('js/shout.js?v=05') }}"></script>
     <script type="text/javascript" src="{{ url('files/wysibb/jquery.wysibb.js') }}"></script>
     <script>
         $(document).ready(function () {

@@ -13,15 +13,20 @@ let mix = require('laravel-mix')
 
 mix.js('resources/assets/js/app.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css')
+
+  // themes
   .sass('resources/assets/sass/themes/blur.scss', 'public/css/themes/blur.css')
   .sass('resources/assets/sass/themes/dark.scss', 'public/css/themes/dark.css')
   .sass('resources/assets/sass/themes/galactic.scss', 'public/css/themes/galactic.css')
+
+  // unit3d custom scripts
   .scripts([
-    'resources/assets/unit3d/hoe.js',
-    'resources/assets/unit3d/emoji.js',
-    'resources/assets/unit3d/shout.js',
-    'resources/assets/unit3d/twostep.js',
-    'resources/assets/unit3d/blutopia.js'
+    'resources/assets/js/unit3d/hoe.js',
+    'resources/assets/js/unit3d/vendor/livicons.js',
+    'resources/assets/js/unit3d/emoji.js',
+    'resources/assets/js/unit3d/shout.js',
+    'resources/assets/js/unit3d/twostep.js',
+    'resources/assets/js/unit3d/blutopia.js'
   ], 'public/js/unit3d.js')
 
 // Full API

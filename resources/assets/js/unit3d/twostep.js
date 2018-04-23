@@ -4,22 +4,22 @@ $(function () {
   // Check for on keypress
   $('input').on('keydown', function (event) {
 
-    var self = $(this)
+    let self = $(this)
 
     // Keyboard Controls
-    var controls = [8, 16, 18, 17, 20, 35, 36, 37, 38, 39, 40, 45, 46, 9, 91, 93, 224, 13, 127, 27, 32]
+    let controls = [8, 16, 18, 17, 20, 35, 36, 37, 38, 39, 40, 45, 46, 9, 91, 93, 224, 13, 127, 27, 32]
 
     // Special Chars
-    var specialChars = [43, 61, 186, 187, 188, 189, 190, 191, 192, 219, 220, 221, 222]
+    let specialChars = [43, 61, 186, 187, 188, 189, 190, 191, 192, 219, 220, 221, 222]
 
     // Numbers
-    var numbers = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+    let numbers = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
 
-    var preCombined = controls.concat(numbers)
-    var combined = preCombined
+    let preCombined = controls.concat(numbers)
+    let combined = preCombined
 
     // Allow Letter
-    for (var i = 65; i <= 90; i++) {
+    for (let i = 65; i <= 90; i++) {
       combined.push(i)
     }
 
@@ -42,7 +42,7 @@ $(function () {
   })
   // Check for copy and paste
   $('input').on('input', function () {
-    var regexp = /[^a-zA-Z0-9]/g
+    let regexp = /[^a-zA-Z0-9]/g
     if ($(this).val().match(regexp)) {
       $(this).val($(this).val().replace(regexp, ''))
     }
@@ -66,7 +66,7 @@ $('.code-inputs').on('webkitAnimationEnd oanimationend msAnimationEnd animatione
 $('#submit_verification').click(function (event) {
   event.preventDefault()
 
-  var formData = $('#verification_form').serialize()
+  let formData = $('#verification_form').serialize()
 
   $.ajax({
     url: '{{ route(\'verify\') }}',
@@ -79,9 +79,9 @@ $('#submit_verification').click(function (event) {
     error: function (response, status, error) {
       if (response.status === 418) {
 
-        var remainingAttempts = response.responseJSON.remainingAttempts
-        var submitTrigger = $('#submit_verification')
-        var varificationForm = $('#verification_form')
+        let remainingAttempts = response.responseJSON.remainingAttempts
+        let submitTrigger = $('#submit_verification')
+        let varificationForm = $('#verification_form')
 
         $('.code-inputs').addClass('invalid-shake')
         varificationForm[0].reset()
@@ -120,10 +120,7 @@ $('#submit_verification').click(function (event) {
         }
 
         if (remainingAttempts === 0) {
-          $('#verification_status_title').html('<h3>{{ trans('
-          auth.titleFailed
-          ') }}</h3>'
-        )
+          $('#verification_status_title').html(`<h3>{{ trans('auth.titleFailed') }}</h3>`);
 
           varificationForm.fadeOut(100, function () {
 
@@ -153,10 +150,10 @@ $.ajaxSetup({
 $('#resend_code_trigger').click(function (event) {
   event.preventDefault()
 
-  var self = $(this)
-  var resultStatus
-  var resultData
-  var endpoint = '{{ route(\'resend\') }}'
+  let self = $(this)
+  let resultStatus
+  let resultData
+  let endpoint = '{{ route(\'resend\') }}'
 
   self.addClass('disabled')
     .attr('disabled', true)
