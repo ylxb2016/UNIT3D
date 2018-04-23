@@ -12032,6 +12032,12 @@ try {
   __webpack_require__(15);
 } catch (e) {}
 
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]')
+  }
+});
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

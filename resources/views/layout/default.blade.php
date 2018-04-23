@@ -28,12 +28,6 @@
         <script type="text/javascript" src="{{ url('js/app.js') }}"></script>
         <script type="text/javascript" src="{{ url('js/unit3d.js') }}"></script>
 
-        {{--@if(auth()->user()->style == 1)
-            <link rel="stylesheet" href="{{ url('files/wysibb/theme/dark/wbbtheme.css') }}"/>
-        @elseif(auth()->user()->style == 2)
-            <link rel="stylesheet" href="{{ url('files/wysibb/theme/blur/wbbtheme.css') }}"/>
-        @endif--}}
-
         @if (config('other.freeleech') == true || config('other.invite-only') == false || config('other.doubleup') == true)
             <script type="text/javascript">
                 CountDownTimer('{{config('other.freeleech_until')}}', 'promotions');

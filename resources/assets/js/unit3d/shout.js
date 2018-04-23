@@ -1,6 +1,6 @@
-var scollBox = $('.shoutbox')
-var next_batch = null
-var forceScroll = true
+let scollBox = $('.shoutbox')
+let next_batch = null
+let forceScroll = true
 let messages = $('.chat-messages .list-group')
 
 messages.animate({scrollTop: messages.prop('scrollHeight')}, 0)
@@ -50,7 +50,7 @@ function updateTime () {
   })
 }
 
-var xhr = new XMLHttpRequest()
+let xhr = new XMLHttpRequest()
 
 function updateMessages () {
   $('.chat-messages .list-group')
@@ -84,11 +84,11 @@ function updateMessages () {
 
 window.setTimeout(updateMessages, 3000)
 
-var xhr = new XMLHttpRequest()
+let xhr = new XMLHttpRequest()
 
 function editorOnKeyDown (evt, sender = null) {
   if (evt.key == 'Enter' && !evt.shiftKey) {
-    var message = $('#chat-message').bbcode()
+    let message = $('#chat-message').bbcode()
     post_data = {
       'message': message
     }
