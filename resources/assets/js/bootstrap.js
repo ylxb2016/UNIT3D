@@ -59,6 +59,7 @@ if (token) {
 require('select2')
 require('ladda')
 require('jquery-textcomplete')
+require('./wysibb/jquery.wysibb')
 
 window.Raphael = require('raphael');
 window.sweetalert = require('sweetalert2')

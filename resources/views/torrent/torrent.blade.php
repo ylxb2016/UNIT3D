@@ -5,7 +5,7 @@
 @endsection
 
 @section('stylesheets')
-    <link rel="stylesheet" href="{{ url('files/wysibb/theme/default/wbbtheme.css') }}">
+
 @endsection
 
 @section('meta')
@@ -575,7 +575,7 @@
                     <div class="col-sm-12 movie-list">
                         <h3 class="movie-title">
                             <a href="{{ route('torrent', array('slug' => $s->slug, 'id' => $s->id)) }}"
-                               data-toggle="tooltip" title="" data-original-title="{{ $s->name }}""
+                               data-toggle="tooltip" title="" data-original-title="{{ $s->name }}"
                             title="{{ $s->name }}">{{ $s->name }}</a>
                         </h3>
                         <div class="movie-details">
@@ -691,7 +691,6 @@
 @endsection
 
 @section('javascripts')
-    <script type="text/javascript" src="{{ url('files/wysibb/jquery.wysibb.js') }}"></script>
     <script>
       $(document).ready(function () {
         var wbbOpt = {}
