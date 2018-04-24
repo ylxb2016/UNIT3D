@@ -84,8 +84,6 @@ function updateMessages () {
 
 window.setTimeout(updateMessages, 3000)
 
-let xhr = new XMLHttpRequest()
-
 function editorOnKeyDown (evt, sender = null) {
   if (evt.key == 'Enter' && !evt.shiftKey) {
     let message = $('#chat-message').bbcode()
