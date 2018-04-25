@@ -35,10 +35,18 @@
         </div>
         @foreach($torrents as $t)
             @php $client = new \App\Services\MovieScrapper(config('api-keys.tmdb') , config('api-keys.tvdb') , config('api-keys.omdb')) @endphp
-            @if($t->category_id == 2)
-                @php $movie = $client->scrape('tv', 'tt'. $t->imdb); @endphp
+            @if ($t->category_id == 2)
+                @if ($t->tmdb || $t->tmdb != 0)
+                    @php $movie = $client->scrape('tv', null, $t->tmdb); @endphp
+                @else
+                    @php $movie = $client->scrape('tv', 'tt'. $t->imdb); @endphp
+                @endif
             @else
-                @php $movie = $client->scrape('movie', 'tt'. $t->imdb); @endphp
+                @if ($t->tmdb || $t->tmdb != 0)
+                    @php $movie = $client->scrape('movie', null, $t->tmdb); @endphp
+                @else
+                    @php $movie = $client->scrape('movie', 'tt'. $t->imdb); @endphp
+                @endif
             @endif
             <div class="row">
                 <div class="col-sm-12 movie-list">
@@ -67,9 +75,9 @@
                         <p class="movie-plot">{{ $movie->plot }}</p>
                         <strong>ID:</strong>
                         <span class="badge-user"><a rel="nofollow"
-                                                    href="http://www.imdb.com/title/tt{{ $movie->imdb }}">{{ $movie->imdb }}</a></span>
+                                                    href="http://www.imdb.com/title/{{ $movie->imdb }}">{{ $movie->imdb }}</a></span>
                         <span class="badge-user"><a rel="nofollow"
-                                                    href="https://www.themoviedb.org/movie/{{ $movie->tmdb }}">{{ $movie->tmdb }}</a></span>
+                                                    href="https://www.themoviedb.org/{{ strtolower($category->name) }}/{{ $movie->tmdb }}">{{ $movie->tmdb }}</a></span>
                         <strong>Genre: </strong>
                         @if($movie->genres)
                             @foreach($movie->genres as $genre)
