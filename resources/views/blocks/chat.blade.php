@@ -28,6 +28,7 @@
 <br>
 
 @section('javascripts')
+    <script type="text/javascript" src="{{ url('js/shout.js') }}"></script>
     <script>
         $(document).ready(function () {
             var wbbOpt = {}
