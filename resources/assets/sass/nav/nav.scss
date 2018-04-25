@@ -880,3 +880,13 @@ body[theme-bg="bg9"] {
   -webkit-animation: hue 10s infinite linear;
   text-transform: uppercase
 }
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}

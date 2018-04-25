@@ -13,10 +13,12 @@
     "ajv": "^6.0.0",
     "axios": "^0.18",
     "bootstrap-sass": "^3.3.7",
+    "countup.js": "^1.9.3",
     "cross-env": "^5.1",
     "font-awesome": "^4.7.0",
     "jquery": "^1.8",
     "jquery-textcomplete": "^1.8.4",
+    "jquery.flot": "^0.8.3",
     "ladda": "^1.0.6",
     "laravel-mix": "^2.0",
     "lodash": "^4.17.4",
@@ -25,6 +27,7 @@
     "spin.js": "^3.1.0",
     "sweetalert2": "^7.18.0",
     "toastr": "^2.1.4",
-    "vue": "^2.5.7"
+    "vue": "^2.5.7",
+    "vue-countup-v2": "^1.0.3"
   }
 }

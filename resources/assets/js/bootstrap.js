@@ -7,6 +7,7 @@ window._ = require('lodash')
  */
 
 try {
+  // Note: Eventually we will end up 100% jQuery free with the conversion to VueJS
   window.$ = window.jQuery = require('jquery')
 
   require('bootstrap-sass')
@@ -64,7 +65,19 @@ if (token) {
  */
 require('select2')
 require('ladda')
+
+/*
+ * jQuery Extensions
+ *
+ * Note: Eventually we will end up 100% jQuery free with the conversion to VueJS
+ */
 require('jquery-textcomplete')
+require('jquery.flot')
+
+// countUp JS from npm
+window.CountUp = require('countup.js')
+
+// wysibb editor
 require('./wysibb/jquery.wysibb')
 
 window.Raphael = require('raphael');

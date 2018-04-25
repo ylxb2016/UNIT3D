@@ -18628,6 +18628,16 @@ body[theme-bg="bg9"] {
   text-transform: uppercase;
 }
 
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
 .permalink {
   color: #E5E5E5;
 }
