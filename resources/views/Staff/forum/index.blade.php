@@ -35,10 +35,10 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($categories as $c)
+            {{--@foreach($forums as $c)
                 <tr class="success">
                     <td>
-                        <a href="{{ route('staff_forum_edit', array('slug' => $c->slug, 'id' => $c->id)) }}">{{ $c->name }}</a>
+                        <a href="{{ route('staff_forum_edit', ['slug' => $c->slug, 'id' => $c->id]) }}">{{ $c->name }}</a>
                     </td>
                     <td>Category</td>
                     <td>{{ $c->position }}</td>
@@ -48,7 +48,7 @@
                 @foreach($c->getForumsInCategory() as $f)
                     <tr>
                         <td>
-                            <a href="{{ route('staff_forum_edit', array('slug' => $f->slug, 'id' => $f->id)) }}">---- {{ $f->name }}</a>
+                            <a href="{{ route('staff_forum_edit', ['slug' => $f->slug, 'id' => $f->id]) }}">---- {{ $f->name }}</a>
                         </td>
                         <td>Forum</td>
                         <td>{{ $f->position }}</td>
@@ -56,7 +56,7 @@
                                class="btn btn-danger">Delete</a></td>
                     </tr>
                 @endforeach
-            @endforeach
+            @endforeach--}}
             </tbody>
         </table>
     </div>

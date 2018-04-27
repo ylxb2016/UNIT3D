@@ -152,7 +152,7 @@ class User extends Authenticatable
     */
     public function topics()
     {
-        return $this->hasMany(Topic::class, 'first_post_user_id', 'id');
+        return $this->hasManyThrough(ForumTopic::class, ForumPost::class);
     }
 
     /**
@@ -161,7 +161,7 @@ class User extends Authenticatable
      */
     public function posts()
     {
-        return $this->hasMany(\App\Post::class);
+        return $this->hasMany(ForumPost::class);
     }
 
     /**

@@ -25,7 +25,7 @@
     <div class="container box">
         <h2>Edit: {{ $forum->name }}</h2>
 
-        {{ Form::open(array('route' => array('staff_forum_edit', 'slug' => $forum->slug, 'id' => $forum->id))) }}
+        {{--{{ Form::open(array('route' => array('staff_forum_edit', 'slug' => $forum->slug, 'id' => $forum->id))) }}
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" name="title" class="form-control" value="{{ $forum->name }}">
@@ -36,6 +36,8 @@
             <textarea name="description" class="form-control" cols="30" rows="10">{{ $forum->description }}</textarea>
         </div>
 
+        --}}{{-- If the forum is a Forum and not a Category --}}{{--
+        @if($forum->parent_id === 0)
         <div class="form-group">
             <label for="parent_id">Parent forum</label>
             <select name="parent_id" class="form-control">
@@ -46,12 +48,15 @@
                 @endif<!-- /Selectionne le forum parent par defaut -->
                 @foreach($categories as $c)
                     <option value="{{ $c->id }}">{{ $c->name }}</option>
-                    {{-- @foreach($c->getForumsInCategory() as $f)
+                    --}}{{-- @foreach($c->getForumsInCategory() as $f)
                         <option value="{{ $f->id }}">---- {{ $f->name }}</option>
-                    @endforeach --}}
+                    @endforeach --}}{{--
                 @endforeach
             </select>
         </div>
+        @else
+            <input type="hidden" name="parent_id" value="0">
+        @endif
 
         <div class="form-group">
             <label for="position">Position</label>
@@ -108,6 +113,6 @@
         </table>
 
         <button type="submit" class="btn btn-default">Save Forum</button>
-        {{ Form::close() }}
+        {{ Form::close() }}--}}
     </div>
 @endsection

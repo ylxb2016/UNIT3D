@@ -11,17 +11,19 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($user as $k)
+            {{--@foreach($user as $k)
                 <tr>
                     <td>{{ $k->id }}</td>
                     <td>{{ $k->username }}</td>
                     <td>{{ $k->group_id }}</td>
                 </tr>
-            @endforeach
+            @endforeach--}}
             </tbody>
         </table>
+
         <hr>
-        {{ Form::open(array('route' => 'staff_forum_perm')) }}
+
+        {{--{{ Form::open(array('route' => 'staff_forum_perm')) }}
         <p>Select name of user you want to modify :</p>
         <select name="name" class="form-control">
             @foreach($user as $k)
@@ -59,7 +61,7 @@
             </select> <br>
             <button type="submit" class="btn btn-default">Save</button>
         </div>
-        {{ Form::close() }}
+        {{ Form::close() }}--}}
 
     </div>
 @endsection
