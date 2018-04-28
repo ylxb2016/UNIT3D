@@ -12,15 +12,16 @@
 
 namespace App\Http\Controllers;
 
+use App\ForumCategory;
+use App\ForumPermission;
+use App\ForumPost;
+use App\ForumTopic;
 use App\Repositories\TaggedUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Forum;
-use App\Post;
-use App\Topic;
 use App\User;
 use App\Shoutbox;
-use App\Like;
 use App\Achievements\UserMadeFirstPost;
 use App\Achievements\UserMade25Posts;
 use App\Achievements\UserMade50Posts;
@@ -44,10 +45,58 @@ class ForumController extends Controller
      * @var TaggedUserRepository
      */
     private $tag;
+    /**
+     * @var ForumCategory
+     */
+    private $category;
+    /**
+     * @var Forum
+     */
+    private $forum;
+    /**
+     * @var ForumPermission
+     */
+    private $permission;
+    /**
+     * @var ForumTopic
+     */
+    private $topic;
+    /**
+     * @var ForumPost
+     */
+    private $post;
 
-    public function __construct(TaggedUserRepository $tag)
+    public function __construct(
+        TaggedUserRepository $tag,
+        ForumCategory $category,
+        Forum $forum,
+        ForumPermission $permission,
+        ForumTopic $topic,
+        ForumPost $post
+    )
     {
         $this->tag = $tag;
+        $this->category = $category;
+        $this->forum = $forum;
+        $this->permission = $permission;
+        $this->topic = $topic;
+        $this->post = $post;
+    }
+
+    public function index()
+    {
+        $categories = $this->category->oldest('pos')->paginate(50);
+
+        // Total Forums Count
+        $num_forums = $this->forum->count();
+
+        // Total Posts Count
+        $num_posts = $this->post->count();
+
+        // Total Topics Count
+        $num_topics = $this->topic->count();
+
+        return view('forum.index', ['categories' => $categories, 'num_posts' => $num_posts, 'num_forums' => $num_forums, 'num_topics' => $num_topics]);
     }
 
     /**
@@ -61,29 +110,13 @@ class ForumController extends Controller
     {
         $user = auth()->user();
         $search = $request->input('name');
-        $results = Topic::where([
+        $results = ForumTopic::where([
             ['name', 'like', '%' . $request->input('name') . '%'],
         ])->latest()->paginate(25);
 
         $results->setPath('?name=' . $request->input('name'));
 
         return view('forum.results', ['results' => $results, 'user' => $user]);
-    }
-
-    /**
-     * Display the forum homepage
-     *
-     */
-    public function index()
-    {
-        $categories = Forum::oldest('position')->get();
-        // Total Forums Count
-        $num_forums = Forum::all()->count();
-        // Total Posts Count
-        $num_posts = Post::all()->count();
-        // Total Topics Count
-        $num_topics = Topic::all()->count();
-        return view('forum.index', ['categories' => $categories, 'num_posts' => $num_posts, 'num_forums' => $num_forums, 'num_topics' => $num_topics]);
     }
 
     /**
@@ -136,31 +169,35 @@ class ForumController extends Controller
      *
      * @access public
      * @param $slug
-     * @param $id
      * @return forum.topic
+     * @throws \Exception
      */
-    public function topic($slug, $id)
+    public function topic($slug)
     {
-        // Find the topic
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::where('slug', $slug)->first();
+
+        if (!$topic) {
+            throw new \Exception('Topic Not Found');
+        }
+
+        /* PERMISSIONS */
+        if (auth()->user()->cannot('read_topic')) {
+            // Redirect him to the forum index
+            return redirect()->route('forum_index')
+                ->with(Toastr::error('You Do Not Have Access To Read This Topic!', 'Whoops!', ['options']));
+        }
 
         // Get the forum of the topic
         $forum = $topic->forum;
 
         // Get The category of the forum
-        $category = $forum->getCategory();
+        $category = $forum->category;
 
         // Get all posts
         $posts = $topic->posts()->paginate(25);
 
         // First post
-        $firstPost = Post::where('topic_id', $topic->id)->first();
-
-        // The user can post a topic here ?
-        if ($category->getPermission()->read_topic != true) {
-            // Redirect him to the forum index
-            return redirect()->route('forum_index')->with(Toastr::error('You Do Not Have Access To Read This Topic!', 'Whoops!', ['options']));
-        }
+        $firstPost = $topic->posts()->first();
 
         // Increment view
         $topic->views++;
@@ -178,7 +215,7 @@ class ForumController extends Controller
     public function reply(Request $request, $slug, $id)
     {
         $user = auth()->user();
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $forum = $topic->forum;
         $category = $forum->getCategory();
 
@@ -240,7 +277,7 @@ class ForumController extends Controller
         $topic->last_post_user_username = $user->username;
 
         // Count post in topic
-        $topic->num_post = Post::where('topic_id', $topic->id)->count();
+        $topic->num_post = ForumPost::where('topic_id', $topic->id)->count();
 
         // Update time
         $topic->last_reply_at = $post->created_at;
@@ -397,7 +434,7 @@ class ForumController extends Controller
     public function editTopic(Request $request, $slug, $id)
     {
         $user = auth()->user();
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $categories = Forum::where('parent_id', '!=', 0)->get();
 
         if ($user->group->is_modo) {
@@ -428,10 +465,10 @@ class ForumController extends Controller
     public function postEdit(Request $request, $slug, $id, $postId)
     {
         $user = auth()->user();
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $forum = $topic->forum;
         $category = $forum->getCategory();
-        $post = Post::findOrFail($postId);
+        $post = ForumPost::findOrFail($postId);
         $parsedContent = null;
 
         if ($user->group->is_modo == false) {
@@ -466,8 +503,8 @@ class ForumController extends Controller
     public function postDelete($slug, $id, $postId)
     {
         $user = auth()->user();
-        $topic = Topic::findOrFail($id);
-        $post = Post::findOrFail($postId);
+        $topic = ForumTopic::findOrFail($id);
+        $post = ForumPost::findOrFail($postId);
 
         if ($user->group->is_modo == false) {
             if ($post->user_id != $user->id) {
@@ -489,7 +526,7 @@ class ForumController extends Controller
      */
     public function closeTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $topic->state = "close";
         $topic->save();
 
@@ -506,7 +543,7 @@ class ForumController extends Controller
      */
     public function openTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $topic->state = "open";
         $topic->save();
         return redirect()->route('forum_topic', ['slug' => $topic->slug, 'id' => $topic->id])->with(Toastr::success('This Topic Is Now Open!', 'Success', ['options']));
@@ -523,7 +560,7 @@ class ForumController extends Controller
     public function deleteTopic($slug, $id)
     {
         $user = auth()->user();
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($user->group->is_modo == true) {
             $posts = $topic->posts();
             $posts->delete();
@@ -544,7 +581,7 @@ class ForumController extends Controller
      */
     public function pinTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $topic->pinned = 1;
         $topic->save();
         return redirect()->route('forum_topic', ['slug' => $topic->slug, 'id' => $topic->id])->with(Toastr::success('This Topic Is Now Pinned!', 'Success', ['options']));
@@ -560,7 +597,7 @@ class ForumController extends Controller
      */
     public function unpinTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         $topic->pinned = 0;
         $topic->save();
         return redirect()->route('forum_topic', ['slug' => $topic->slug, 'id' => $topic->id])->with(Toastr::success('This Topic Is Now Unpinned!', 'Success', ['options']));
@@ -576,7 +613,7 @@ class ForumController extends Controller
      */
     public function approvedTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->approved == 0) {
             $topic->approved = "1";
         } else {
@@ -589,7 +626,7 @@ class ForumController extends Controller
 
     public function deniedTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->denied == 0) {
             $topic->denied = "1";
         } else {
@@ -602,7 +639,7 @@ class ForumController extends Controller
 
     public function solvedTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->solved == 0) {
             $topic->solved = "1";
         } else {
@@ -615,7 +652,7 @@ class ForumController extends Controller
 
     public function invalidTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->invalid == 0) {
             $topic->invalid = "1";
         } else {
@@ -628,7 +665,7 @@ class ForumController extends Controller
 
     public function bugTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->bug == 0) {
             $topic->bug = "1";
         } else {
@@ -641,7 +678,7 @@ class ForumController extends Controller
 
     public function suggestionTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->suggestion == 0) {
             $topic->suggestion = "1";
         } else {
@@ -654,7 +691,7 @@ class ForumController extends Controller
 
     public function implementedTopic($slug, $id)
     {
-        $topic = Topic::findOrFail($id);
+        $topic = ForumTopic::findOrFail($id);
         if ($topic->implemented == 0) {
             $topic->implemented = "1";
         } else {
@@ -667,7 +704,7 @@ class ForumController extends Controller
 
     public function likePost($postId)
     {
-        $post = Post::findOrFail($postId);
+        $post = ForumPost::findOrFail($postId);
         $user = auth()->user();
         $like = $user->likes()->where('post_id', $post->id)->where('like', 1)->first();
         $dislike = $user->likes()->where('post_id', $post->id)->where('dislike', 1)->first();
@@ -689,7 +726,7 @@ class ForumController extends Controller
 
     public function dislikePost($postId)
     {
-        $post = Post::findOrFail($postId);
+        $post = ForumPost::findOrFail($postId);
         $user = auth()->user();
         $like = $user->likes()->where('post_id', $post->id)->where('like', 1)->first();
         $dislike = $user->likes()->where('post_id', $post->id)->where('dislike', 1)->first();

@@ -20,7 +20,7 @@ class AlterForumsTable extends Migration
             $table->integer('forum_category_id')->unsigned();
             $table->integer('pos')->default(1);
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class AlterForumsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('forums');
+        Schema::dropIfExists('forums');
     }
 }

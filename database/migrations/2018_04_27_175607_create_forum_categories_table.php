@@ -16,7 +16,7 @@ class CreateForumCategoriesTable extends Migration
         Schema::create('forum_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->integer('pos')->default(1);
             $table->timestamps();

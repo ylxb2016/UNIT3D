@@ -13,13 +13,18 @@ class ForumTopic extends Model
         return $this->belongsTo(Forum::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function posts()
     {
         return $this->hasMany(ForumPost::class);
     }
 
-    public function users()
+    public function tags()
     {
-        return $this->hasManyThrough(User::class, ForumPost::class);
+        return $this->belongsToMany(ForumTag::class, 'forum_tag_forum_topic');
     }
 }

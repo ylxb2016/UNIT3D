@@ -23,11 +23,11 @@
 
 Route::group(['middleware' => 'language'], function () {
 
-/*
-|------------------------------------------
-| Website (Not Authorized)
-|------------------------------------------
-*/
+    /*
+    |------------------------------------------
+    | Website (Not Authorized)
+    |------------------------------------------
+    */
     Route::group(['before' => 'auth', 'middleware' => 'guest'], function () {
         // Authentication Routes
         Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -46,7 +46,8 @@ Route::group(['middleware' => 'language'], function () {
         Route::get('/activate/{token}', 'Auth\ActivationController@activate')->name('activate');
 
         // Forgot Username Routes
-        Route::get('username/reminder', 'Auth\ForgotUsernameController@showForgotUsernameForm')->name('username.request');
+        Route::get('username/reminder',
+            'Auth\ForgotUsernameController@showForgotUsernameForm')->name('username.request');
         Route::post('username/reminder', 'Auth\ForgotUsernameController@sendUserameReminder')->name('username.email');
     });
 
@@ -154,7 +155,8 @@ Route::group(['middleware' => 'language'], function () {
 
         // Private Messages System
         Route::get('/{username}.{id}/inbox', 'PrivateMessageController@getPrivateMessages')->name('inbox');
-        Route::get('/{username}.{id}/message/{pmid}', 'PrivateMessageController@getPrivateMessageById')->name('message');
+        Route::get('/{username}.{id}/message/{pmid}',
+            'PrivateMessageController@getPrivateMessageById')->name('message');
         Route::get('/{username}.{id}/outbox', 'PrivateMessageController@getPrivateMessagesSent')->name('outbox');
         Route::get('/{username}.{id}/create', 'PrivateMessageController@makePrivateMessage')->name('create');
         Route::any('/{username}.{id}/mark-all-read', 'PrivateMessageController@markAllAsRead')->name('mark-all-read');
@@ -266,69 +268,78 @@ Route::group(['middleware' => 'language'], function () {
         Route::any('/notification/massread', 'NotificationController@massRead')->name('massRead_notifications');
         Route::any('/notification/delete/{id}', 'NotificationController@delete')->name('delete_notification');
         Route::any('/notification/delete', 'NotificationController@deleteAll')->name('delete_notifications');
-    });
 
-    /*
-    |------------------------------------------
-    | ShoutBox Routes Group (when authorized)
-    |------------------------------------------
-    */
-    Route::group(['prefix' => 'shoutbox', 'middleware' => ['auth', 'twostep', 'online', 'banned', 'active', 'private']], function () {
-        Route::get('/', 'HomeController@home')->name('shoutbox-home');
-        Route::get('/messages/{after?}', 'ShoutboxController@pluck')->name('shoutbox-fetch');
-        Route::post('/send', 'ShoutboxController@send')->name('shoutbox-send');
-        Route::get('/delete/{id}', 'ShoutboxController@deleteShout')->name('shout-delete');
-    });
 
-    /*
-    |------------------------------------------
-    | Community Routes Group (when authorized)
-    |------------------------------------------
-    */
-    Route::group(['prefix' => 'forums', 'middleware' => ['auth', 'twostep', 'online', 'banned', 'active', 'private']], function () {
-        // Display Forum Index
-        Route::get('/', 'ForumController@index')->name('forum_index');
-        // Search Forums
-        Route::any('/search', 'ForumController@search')->name('forum_search');
-        // Display Forum Categories
-        Route::get('/category/{slug}.{id}', 'ForumController@category')->name('forum_category');
-        // Display Topics
-        Route::get('/forum/{slug}.{id}', 'ForumController@display')->name('forum_display');
-        // Create New Topic
-        Route::any('/forum/{slug}.{id}/new-topic', 'ForumController@newTopic')->name('forum_new_topic');
-        // View Topic
-        Route::get('/topic/{slug}.{id}', 'ForumController@topic')->name('forum_topic');
-        // Close Topic
-        Route::get('/topic/{slug}.{id}/close', 'ForumController@closeTopic')->name('forum_close');
-        // Open Topic
-        Route::get('/topic/{slug}.{id}/open', 'ForumController@openTopic')->name('forum_open');
-        // Edit Post
-        Route::any('/topic/{slug}.{id}/post-{postId}/edit', 'ForumController@postEdit')->name('forum_post_edit');
-        // Delete Post
-        Route::any('/topic/{slug}.{id}/post-{postId}/delete', 'ForumController@postDelete')->name('forum_post_delete');
-        // Reply To Topic
-        Route::post('/topic/{slug}.{id}/reply', 'ForumController@reply')->name('forum_reply');
-        // Edit Topic
-        Route::any('/topic/{slug}.{id}/edit', 'ForumController@editTopic')->name('forum_edit_topic');
-        // Delete Topic
-        Route::any('/topic/{slug}.{id}/delete', 'ForumController@deleteTopic')->name('forum_delete_topic');
-        // Pin Topic
-        Route::any('/topic/{slug}.{id}/pin', 'ForumController@pinTopic')->name('forum_pin_topic');
-        // Unpin Topic
-        Route::any('/topic/{slug}.{id}/unpin', 'ForumController@unpinTopic')->name('forum_unpin_topic');
+        // Shoutbox
+        Route::prefix('shoutbox')->group(function () {
+            Route::get('/', 'HomeController@home')->name('shoutbox-home');
+            Route::get('/messages/{after?}', 'ShoutboxController@pluck')->name('shoutbox-fetch');
+            Route::post('/send', 'ShoutboxController@send')->name('shoutbox-send');
+            Route::get('/delete/{id}', 'ShoutboxController@deleteShout')->name('shout-delete');
+        });
 
-        // Topic Label System
-        Route::get('/topic/{slug}.{id}/approved', 'ForumController@approvedTopic')->name('forum_approved');
-        Route::get('/topic/{slug}.{id}/denied', 'ForumController@deniedTopic')->name('forum_denied');
-        Route::get('/topic/{slug}.{id}/solved', 'ForumController@solvedTopic')->name('forum_solved');
-        Route::get('/topic/{slug}.{id}/invalid', 'ForumController@invalidTopic')->name('forum_invalid');
-        Route::get('/topic/{slug}.{id}/bug', 'ForumController@bugTopic')->name('forum_bug');
-        Route::get('/topic/{slug}.{id}/suggestion', 'ForumController@suggestionTopic')->name('forum_suggestion');
-        Route::get('/topic/{slug}.{id}/implemented', 'ForumController@implementedTopic')->name('forum_implemented');
+        // Forums
+        Route::prefix('forums')->group(function () {
+            // Display Forum Index
+            Route::get('/', 'ForumController@index')->name('forum_index');
 
-        // Like - Dislike System
-        Route::any('/like/post/{postId}', 'ForumController@likePost')->name('like');
-        Route::any('/dislike/post/{postId}', 'ForumController@dislikePost')->name('dislike');
+            // Search Forums
+            Route::any('/search', 'ForumController@search')->name('forum_search');
+
+            // Display Forum Categories
+            Route::get('/category/{slug}.{id}', 'ForumController@category')->name('forum_category');
+
+            // Display Topics
+            Route::get('/forum/{slug}.{id}', 'ForumController@display')->name('forum_display');
+
+            // Create New Topic
+            Route::any('/forum/{slug}.{id}/new-topic', 'ForumController@newTopic')->name('forum_new_topic');
+
+            // View Topic
+            Route::get('/topic/{slug}', 'ForumController@topic')->name('forum_topic');
+
+            // Close Topic
+            Route::get('/topic/{slug}/close', 'ForumController@closeTopic')->name('forum_close');
+
+            // Open Topic
+            Route::get('/topic/{slug}/open', 'ForumController@openTopic')->name('forum_open');
+
+            // Edit Post
+            Route::any('/topic/{slug}.{id}/post-{postId}/edit', 'ForumController@postEdit')->name('forum_post_edit');
+
+            // Delete Post
+            Route::any('/topic/{slug}.{id}/post-{postId}/delete',
+                'ForumController@postDelete')->name('forum_post_delete');
+
+            // Reply To Topic
+            Route::post('/topic/{slug}.{id}/reply', 'ForumController@reply')->name('forum_reply');
+
+            // Edit Topic
+            Route::any('/topic/{slug}.{id}/edit', 'ForumController@editTopic')->name('forum_edit_topic');
+
+            // Delete Topic
+            Route::any('/topic/{slug}.{id}/delete', 'ForumController@deleteTopic')->name('forum_delete_topic');
+
+            // Pin Topic
+            Route::any('/topic/{slug}.{id}/pin', 'ForumController@pinTopic')->name('forum_pin_topic');
+
+            // Unpin Topic
+            Route::any('/topic/{slug}.{id}/unpin', 'ForumController@unpinTopic')->name('forum_unpin_topic');
+
+            // Topic Label System
+            Route::get('/topic/{slug}.{id}/approved', 'ForumController@approvedTopic')->name('forum_approved');
+            Route::get('/topic/{slug}.{id}/denied', 'ForumController@deniedTopic')->name('forum_denied');
+            Route::get('/topic/{slug}.{id}/solved', 'ForumController@solvedTopic')->name('forum_solved');
+            Route::get('/topic/{slug}.{id}/invalid', 'ForumController@invalidTopic')->name('forum_invalid');
+            Route::get('/topic/{slug}.{id}/bug', 'ForumController@bugTopic')->name('forum_bug');
+            Route::get('/topic/{slug}.{id}/suggestion', 'ForumController@suggestionTopic')->name('forum_suggestion');
+            Route::get('/topic/{slug}.{id}/implemented', 'ForumController@implementedTopic')->name('forum_implemented');
+
+            // Like - Dislike System
+            Route::any('/like/post/{postId}', 'ForumController@likePost')->name('like');
+            Route::any('/dislike/post/{postId}', 'ForumController@dislikePost')->name('dislike');
+        });
+
     });
 
 
@@ -337,7 +348,11 @@ Route::group(['middleware' => 'language'], function () {
     | Staff Dashboard Routes Group (when authorized and a staff group)
     |-----------------------------------------------------------------
     */
-    Route::group(['prefix' => 'staff_dashboard', 'middleware' => ['auth', 'twostep', 'modo', 'online', 'banned', 'active', 'private'], 'namespace' => 'Staff'], function () {
+    Route::group([
+        'prefix' => 'staff_dashboard',
+        'middleware' => ['auth', 'twostep', 'modo', 'online', 'banned', 'active', 'private'],
+        'namespace' => 'Staff'
+    ], function () {
 
         // Staff Dashboard
         Route::any('/', 'HomeController@home')->name('staff_dashboard');
@@ -358,7 +373,8 @@ Route::group(['middleware' => 'language'], function () {
         Route::any('/user_results', 'UserController@userSearch')->name('user_results');
         Route::any('/user_edit/{username}.{id}', 'UserController@userSettings')->name('user_setting');
         Route::any('/user_edit/{username}.{id}/edit', 'UserController@userEdit')->name('user_edit');
-        Route::any('/user_edit/{username}.{id}/permissions', 'UserController@userPermissions')->name('user_permissions');
+        Route::any('/user_edit/{username}.{id}/permissions',
+            'UserController@userPermissions')->name('user_permissions');
         Route::any('/user_delete/{username}.{id}', 'UserController@userDelete')->name('user_delete');
         Route::any('/user_edit/{username}.{id}/password', 'UserController@userPassword')->name('user_password');
 

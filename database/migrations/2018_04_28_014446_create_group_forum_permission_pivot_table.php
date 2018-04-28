@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumPermissionsTable extends Migration
+class CreateGroupForumPermissionPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateForumPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forum_permissions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique();
-            $table->timestamps();
+        Schema::create('group_forum_permission', function (Blueprint $table) {
+            $table->integer('group_id')->unsigned();
+            $table->integer('forum_permission_id')->unsigned();
         });
     }
 
@@ -27,7 +26,6 @@ class CreateForumPermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forum_permissions');
+        Schema::dropIfExists('group_forum_permission');
     }
-
 }

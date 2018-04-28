@@ -89,7 +89,22 @@ class User extends Authenticatable
      */
     public function group()
     {
-        return $this->belongsTo(\App\Group::class);
+        return $this->belongsTo(Group::class);
+    }
+
+    public function can($ability, $arguments = [])
+    {
+        return $this->group->permissions->pluck('name')->contains($ability);
+    }
+
+    public function cant($ability, $arguments = [])
+    {
+        return !$this->can($ability);
+    }
+
+    public function cannot($ability, $arguments = [])
+    {
+        return $this->cant($ability);
     }
 
     /**

@@ -26,7 +26,7 @@ class CreateTypesTable extends Migration
         Schema::create('types', function (Blueprint $table) {
             $table->integer('id', true);
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('position');
         });
     }

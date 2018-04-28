@@ -8,8 +8,9 @@ class ForumPermission extends Model
 {
     protected $guarded = ['id'];
 
-    public function forum()
+    public function groups()
     {
-        return $this->belongsTo(Forum::class);
+        return $this->belongsToMany(Group::class, 'group_forum_permission');
     }
+
 }

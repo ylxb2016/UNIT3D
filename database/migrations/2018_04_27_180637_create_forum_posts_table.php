@@ -17,7 +17,6 @@ class CreateForumPostsTable extends Migration
             $table->increments('id');
             $table->integer('forum_topic_id')->unsigned();
             $table->integer('user_id')->undisgned();
-            $table->integer('likes')->default(0);
             $table->text('body');
             $table->timestamps();
         });

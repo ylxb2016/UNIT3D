@@ -15,6 +15,7 @@ namespace App\Providers;
 use App\Repositories\WishInterface;
 use App\Repositories\WishRepository;
 use App\Services\Clients\OmdbClient;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::share('auth', auth()->user());
     }
 
     /**

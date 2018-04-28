@@ -26,7 +26,7 @@ class CreateTopicsTable extends Migration
         Schema::create('topics', function (Blueprint $table) {
             $table->integer('id', true);
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('state')->nullable();
             $table->boolean('pinned')->default(0);
             $table->boolean('approved')->default(0);

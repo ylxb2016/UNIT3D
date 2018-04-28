@@ -16,9 +16,12 @@ class CreateForumTopicsTable extends Migration
         Schema::create('forum_topics', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('forum_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('name');
-            $table->string('slug');
-            $table->text('description')->nullable();
+            $table->string('slug')->unique();
+            $table->boolean('locked')->default(false);
+            $table->boolean('pinned')->default(false);
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }

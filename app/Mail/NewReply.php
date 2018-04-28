@@ -12,6 +12,8 @@
 
 namespace App\Mail;
 
+use App\ForumTopic;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -29,7 +31,7 @@ class NewReply extends Mailable
      *
      * @return void
      */
-    public function __construct(\App\User $user, \App\Topic $topic)
+    public function __construct(User $user, ForumTopic $topic)
     {
         $this->user = $user;
         $this->topic = $topic;

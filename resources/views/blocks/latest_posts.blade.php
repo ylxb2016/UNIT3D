@@ -16,14 +16,20 @@
                 </thead>
                 <tbody>
                 @foreach($posts as $p)
-                    @if ($p->topic->viewable())
+                    @if ($p->user === auth()->user()->id || auth()->user()->can('read_topic'))
                         <tr class="">
                             <td>
-                                <a href="{{ route('forum_topic', array('slug' => $p->topic->slug, 'id' => $p->topic->id)) }}?page={{$p->getPageNumber()}}#post-{{$p->id}}">{{ preg_replace('#\[[^\]]+\]#', '', str_limit($p->content), 75) }}
-                                    ...</a></td>
+                                <a href="{{ route('forum_topic', ['slug' => $p->topic->slug]) }}?page=1#post-{{$p->id}}">
+                                    {{ App\Helpers\Bbcode::stripBBCode(str_limit($p->body, 50)) }}
+                                </a>
+                            </td>
                             <td>{{ $p->topic->name }}</td>
                             <td>{{ $p->user->username }}</td>
                             <td>{{ $p->updated_at->diffForHumans() }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td>You don't have permission to view.</td>
                         </tr>
                     @endif
                 @endforeach

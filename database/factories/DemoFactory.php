@@ -21,6 +21,30 @@
 |
 */
 
+/*
+ *  Users Factory
+ */
+$factory->define(App\User::class, function (Faker\Generator $faker) {
+    return [
+        'username' => $faker->firstName,
+        'email' => $faker->safeEmail,
+        'password' => bcrypt('secret'),
+        'passkey' => str_random(16),
+        'group_id' => $faker->numberBetween(1, 18),
+        'active' => $faker->boolean(70),
+        'uploaded' => 53687091200,
+        'downloaded' => 1073741824,
+        'fl_tokens' => $faker->numberBetween(0, 30),
+        'seedbonus' => $faker->randomFloat(1, 0.00, 10.00),
+        'invites' => $faker->numberBetween(0,10),
+        'hitandruns' => $faker->numberBetween(0,5),
+        'remember_token' => str_random(10),
+    ];
+});
+
+/*
+ * Torrent Factory
+ */
 $factory->define(App\Torrent::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->company,
@@ -42,20 +66,29 @@ $factory->define(App\Torrent::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+/*
+ *  Forum Factories
+ */
+$factory->define(App\ForumCategory::class, function (Faker\Generator $faker) {
     return [
-        'username' => $faker->firstName,
-        'email' => $faker->safeEmail,
-        'password' => bcrypt('secret'),
-        'passkey' => str_random(16),
-        'group_id' => $faker->numberBetween(1, 18),
-        'active' => $faker->boolean(70),
-        'uploaded' => 53687091200,
-        'downloaded' => 1073741824,
-        'fl_tokens' => $faker->numberBetween(0, 30),
-        'seedbonus' => $faker->randomFloat(1, 0.00, 10.00),
-        'invites' => $faker->numberBetween(0,10),
-        'hitandruns' => $faker->numberBetween(0,5),
-        'remember_token' => str_random(10),
+
+    ];
+});
+
+$factory->define(App\Forum::class, function (Faker\Generator $faker) {
+    return [
+
+    ];
+});
+
+$factory->define(App\ForumTopic::class, function (Faker\Generator $faker) {
+    return [
+
+    ];
+});
+
+$factory->define(App\ForumPost::class, function (Faker\Generator $faker) {
+    return [
+
     ];
 });

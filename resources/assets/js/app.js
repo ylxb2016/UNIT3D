@@ -16,7 +16,8 @@ window.Vue = require('vue')
 
 Vue.component('example', require('./components/Example.vue'))
 Vue.component('version', require('./components/Version.vue'))
+Vue.component('latest-topics', require('./components/forums/LatestTopics'))
 
 const app = new Vue({
-    el: '#app'
+  el: '#app'
 })

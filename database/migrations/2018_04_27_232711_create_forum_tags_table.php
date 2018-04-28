@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumPermissionsTable extends Migration
+class CreateForumTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateForumPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forum_permissions', function (Blueprint $table) {
+        Schema::create('forum_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->timestamps();
@@ -27,7 +27,6 @@ class CreateForumPermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forum_permissions');
+        Schema::dropIfExists('forum_tags');
     }
-
 }

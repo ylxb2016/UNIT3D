@@ -22,3 +22,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/lang/{key}', function ($key) {
+    return response(['results' => trans($key)]);
+});

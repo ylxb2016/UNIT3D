@@ -13,6 +13,7 @@ class ForumPost extends Model
 
     public function topic()
     {
-        return $this->belongsTo(ForumTopic::class);
+        return $this->belongsTo(ForumTopic::class, 'forum_topic_id');
     }
+
 }

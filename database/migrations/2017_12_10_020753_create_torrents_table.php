@@ -26,7 +26,7 @@ class CreateTorrentsTable extends Migration
         Schema::create('torrents', function (Blueprint $table) {
             $table->bigInteger('id', true)->unsigned();
             $table->string('name')->index('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->text('description');
             $table->text('mediainfo')->nullable();
             $table->string('info_hash')->index('info_hash');
