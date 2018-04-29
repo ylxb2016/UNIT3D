@@ -2,5 +2,5 @@
     <div class="clearfix visible-sm-block"></div>
 
     {{-- LATEST TOPICS VUE COMPONENT --}}
-    <latest-topics :topics="{{ $topics }}"></latest-topics>
+    <latest-topics :can-read="{{ auth()->user()->can('read_topic') }}"></latest-topics>
 </div>

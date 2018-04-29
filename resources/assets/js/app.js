@@ -14,9 +14,10 @@ window.Vue = require('vue')
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'))
-Vue.component('version', require('./components/Version.vue'))
+Vue.component('version', require('./components/Version'))
 Vue.component('latest-topics', require('./components/forums/LatestTopics'))
+Vue.component('latest-posts', require('./components/forums/LatestPosts'))
+Vue.component('forum-categories-table', require('./components/forums/ForumCategoriesTable'))
 
 const app = new Vue({
   el: '#app'

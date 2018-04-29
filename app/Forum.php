@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
 class Forum extends Model
 {
 
+    protected $appends = ['posts_count', 'topics_count'];
+
     protected $guarded = ['id'];
 
     public function topics()
@@ -37,5 +39,15 @@ class Forum extends Model
     public function posts()
     {
         return $this->hasManyThrough(ForumPost::class, ForumTopic::class);
+    }
+
+    public function getPostsCountAttribute()
+    {
+        return $this->posts()->count();
+    }
+
+    public function getTopicsCountAttribute()
+    {
+        return $this->topics()->count();
     }
 }

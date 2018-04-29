@@ -17,4 +17,9 @@ class ForumCategory extends Model
     {
         return $this->hasManyThrough(ForumTopic::class, Forum::class);
     }
+
+    public function posts()
+    {
+        return $this->topics()->with('posts');
+    }
 }

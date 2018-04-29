@@ -1,15 +1,16 @@
 <template>
-    <div id="latest-topics">
+    <div id="latest-posts">
         <div class="panel panel-chat">
             <div class="panel-heading">
                 <h4>
-                    Latest Topics
+                    Latest Posts
                 </h4>
             </div>
             <div class="table-responsive">
                 <table class="table table-condensed table-striped table-bordered">
                     <thead>
                     <tr>
+                        <th>Post</th>
                         <th>Topic</th>
                         <th>Author</th>
                         <th>Created</th>
@@ -17,18 +18,24 @@
                     </thead>
                     <tbody>
 
-                    <tr v-for="topic in topics" v-if="canRead">
+                    <tr v-for="post in posts" v-if="canRead">
                         <td>
-                            <a :href="`/topic/${topic.slug}`">
-                                {{ topic.name }}
+                            <a :href="`/topic/${post.slug}?page=1#post-${post.id}`">
+                                {{ post.body }}
                             </a>
                         </td>
-                        <td>{{ topic.user.username }}</td>
-                        <td>{{ topic.created_at }}</td>
+                        <td>
+                            <a :href="`/topic/${post.topic.slug}`">
+                                {{ post.topic.name }}
+                            </a>
+                        </td>
+                        <td>{{ post.user.username }}</td>
+                        <td>{{ post.updated_at }}</td>
                     </tr>
                     <tr v-else>
                         <td>You don't have permission to view.</td>
                     </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -37,7 +44,7 @@
 </template>
 <script>
   export default {
-    name: 'latest-topics',
+    name: 'latest-posts',
 
     props: {
       canRead: {default: true}
@@ -45,15 +52,20 @@
 
     data () {
       return {
-        topics: []
+        posts: []
       }
     },
 
     methods: {
-      getTopics () {
-        axios.get(`/api/forums/latest/topics`)
+      getPosts () {
+        axios.get(`/api/forums/latest/posts`, {
+          params: {
+            limit: 5,
+            strip: true
+          }
+        })
           .then((response) => {
-            this.topics = response.data.data
+            this.posts = response.data.data
           })
           .catch((error) => {
             console.error(error.response.message)
@@ -62,7 +74,7 @@
     },
 
     created () {
-      this.getTopics()
+      this.getPosts()
     }
   }
 </script>

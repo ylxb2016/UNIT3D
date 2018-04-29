@@ -46,7 +46,7 @@ class HomeController extends Controller
         $dead = Torrent::where('seeders', 0)->latest('leechers')->take(5)->get();
 
         // Latest Topics Block
-        $topics = ForumTopic::with('user')->latest()->take(5)->get();
+        //$topics = ForumTopic::latest()->take(5)->get();
 
         // Latest Posts Block
         $posts = ForumPost::latest()->take(5)->get();
@@ -65,9 +65,20 @@ class HomeController extends Controller
         $poll = Poll::latest()->first();
 
 
-        return view('home.home', ['user' => $user, 'groups' => $groups, 'articles' => $articles, 'torrents' => $torrents,
-            'best' => $best, 'dying' => $dying, 'leeched' => $leeched, 'dead' => $dead, 'topics' => $topics, 'posts' => $posts,
-            'articles' => $articles, 'shoutboxMessages' => $shoutboxMessages, 'featured' => $featured, 'poll' => $poll]);
+        return view('home.home', [
+            'user' => $user,
+            'groups' => $groups,
+            'articles' => $articles,
+            'torrents' => $torrents,
+            'best' => $best,
+            'dying' => $dying,
+            'leeched' => $leeched,
+            'dead' => $dead,
+            'posts' => $posts,
+            'shoutboxMessages' => $shoutboxMessages,
+            'featured' => $featured,
+            'poll' => $poll
+        ]);
     }
 
     /**
