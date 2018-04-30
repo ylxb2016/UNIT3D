@@ -34,7 +34,7 @@ class CreateForumsTable extends Migration
             $table->integer('last_post_user_id')->nullable();
             $table->string('last_post_user_username')->nullable();
             $table->string('name')->nullable();
-            $table->string('slug')->nullable();
+            $table->string('slug')->unique();
             $table->text('description', 65535)->nullable();
             $table->integer('parent_id')->nullable();
             $table->timestamps();
@@ -49,6 +49,6 @@ class CreateForumsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('forums');
+        Schema::dropIfExists('forums');
     }
 }

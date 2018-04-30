@@ -19,8 +19,8 @@ use App\Torrent;
 use App\User;
 use App\Group;
 use App\Comment;
-use App\Post;
-use App\Topic;
+use App\ForumPost;
+use App\ForumTopic;
 use App\PrivateMessage;
 use App\Note;
 use App\Message;
@@ -183,17 +183,17 @@ class UserController extends Controller
                 $com->save();
             }
             // Removes UserID from Posts if any and replaces with System UserID (0)
-            foreach (Post::where('user_id', $user->id)->get() as $post) {
+            foreach (ForumPost::where('user_id', $user->id)->get() as $post) {
                 $post->user_id = 1;
                 $post->save();
             }
             // Removes UserID from Topic Creators if any and replaces with System UserID (0)
-            foreach (Topic::where('first_post_user_id', $user->id)->get() as $topic) {
+            foreach (ForumTopic::where('first_post_user_id', $user->id)->get() as $topic) {
                 $topic->first_post_user_id = 1;
                 $topic->save();
             }
             // Removes UserID from Topic if any and replaces with System UserID (0)
-            foreach (Topic::where('last_post_user_id', $user->id)->get() as $topic) {
+            foreach (ForumTopic::where('last_post_user_id', $user->id)->get() as $topic) {
                 $topic->last_post_user_id = 1;
                 $topic->save();
             }

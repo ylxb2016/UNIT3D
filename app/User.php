@@ -106,7 +106,22 @@ class User extends Authenticatable
      */
     public function group()
     {
-        return $this->belongsTo(\App\Group::class);
+        return $this->belongsTo(Group::class);
+    }
+
+    public function can($ability, $arguments = [])
+    {
+        return $this->group->permissions->pluck('name')->contains($ability);
+    }
+
+    public function cant($ability, $arguments = [])
+    {
+        return !$this->can($ability);
+    }
+
+    public function cannot($ability, $arguments = [])
+    {
+        return $this->cant($ability);
     }
 
     /**
@@ -169,7 +184,7 @@ class User extends Authenticatable
     */
     public function topics()
     {
-        return $this->hasMany(Topic::class, 'first_post_user_id', 'id');
+        return $this->hasManyThrough(ForumTopic::class, ForumPost::class);
     }
 
     /**
@@ -178,7 +193,7 @@ class User extends Authenticatable
      */
     public function posts()
     {
-        return $this->hasMany(\App\Post::class);
+        return $this->hasMany(ForumPost::class);
     }
 
     /**

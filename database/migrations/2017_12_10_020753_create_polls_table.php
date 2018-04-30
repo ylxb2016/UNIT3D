@@ -27,7 +27,7 @@ class CreatePollsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->default(0);
             $table->string('title');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->boolean('ip_checking')->default(0);
             $table->boolean('multiple_choice')->default(0);
             $table->timestamps();

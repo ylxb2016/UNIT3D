@@ -17,79 +17,37 @@ use Illuminate\Database\Eloquent\Model;
 class Forum extends Model
 {
 
-    /**
-     * Has many topics
-     *
-     */
+    protected $appends = ['posts_count', 'topics_count'];
+
+    protected $guarded = ['id'];
+
     public function topics()
     {
-        return $this->hasMany(\App\Topic::class);
+        return $this->hasMany(ForumTopic::class);
     }
 
-    /**
-     * Has many permissions
-     *
-     */
     public function permissions()
     {
-        return $this->hasMany(\App\Permission::class);
+        return $this->hasMany(ForumPermission::class);
     }
 
-    /**
-     * Returns a table with the forums in the category
-     *
-     */
-    public function getForumsInCategory()
+    public function category()
     {
-        return Forum::where('parent_id', '=', $this->id)->get();
+        return $this->belongsTo(ForumCategory::class);
     }
 
-    /**
-     * Returns the category in which the forum is located
-     *
-     */
-    public function getCategory()
+    public function posts()
     {
-        return Forum::find($this->parent_id);
+        return $this->hasManyThrough(ForumPost::class, ForumTopic::class);
     }
 
-    /**
-     * Count the number of posts in the forum
-     *
-     *
-     */
-    public function getPostCount($forumId)
+    public function getPostsCountAttribute()
     {
-        $forum = Forum::find($forumId);
-        $topics = $forum->topics;
-        $count = 0;
-        foreach ($topics as $t) {
-            $count += $t->posts()->count();
-        }
-        return $count;
+        return $this->posts()->count();
     }
 
-    /**
-     * Count the number of topics in the forum
-     *
-     */
-    public function getTopicCount($forumId)
+    public function getTopicsCountAttribute()
     {
-        $forum = Forum::find($forumId);
-        return Topic::where('forum_id', '=', $forum->id)->count();
-    }
-
-    /**
-     * Returns the permission field
-     *
-     */
-    public function getPermission()
-    {
-        if (auth()->check()) {
-            $group = auth()->user()->group;
-        } else {
-            $group = Group::find(2);
-        }
-        return Permission::whereRaw('forum_id = ? AND group_id = ?', [$this->id, $group->id])->first();
+        return $this->topics()->count();
     }
 }

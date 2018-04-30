@@ -22,9 +22,31 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+/* Possible solution for translations */
+Route::get('/lang/{key}', function ($key) {
+    return response(['results' => trans($key)]);
+});
+
+
 Route::namespace('API')->group(function () {
 
-    Route::prefix('chat')->group(function () {
+    Route::prefix('forums')->group(function () {
 
+        /* Topics */
+        Route::get('/topics', 'ForumTopicsController@all');
+        Route::post('/topics', 'ForumTopicsController@create');
+        Route::get('/topics/{id}', 'ForumTopicsController@topic');
+        Route::post('/topics/{id}', 'ForumTopicsController@update');
+        Route::delete('/topics/{id}/delete', 'ForumTopicsController@destroy');
+        Route::get('/latest/topics/{limit?}', 'ForumTopicsController@latest');
+
+        /* Posts */
+        Route::get('/posts', 'ForumPostsController@all');
+        Route::post('/posts', 'ForumPostsController@create');
+        Route::get('/posts/{id}', 'ForumPostsController@post');
+        Route::post('/posts/{id}', 'ForumPostsController@update');
+        Route::delete('/posts/{id}/delete', 'ForumPostsController@destroy');
+        Route::get('/latest/posts/{limit?}', 'ForumPostsController@latest');
     });
 });

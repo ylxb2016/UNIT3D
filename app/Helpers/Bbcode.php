@@ -41,4 +41,10 @@ class Bbcode
     {
         return self::decodaWithDefaults($data)->parse();
     }
+
+    public static function stripBBCode($content) {
+        $pattern = '|[[\/\!]*?[^\[\]]*?]|si';
+        $replace = '';
+        return preg_replace($pattern, $replace, $content);
+    }
 }

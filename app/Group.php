@@ -36,7 +36,7 @@ class Group extends Model
      */
     public function users()
     {
-        return $this->hasMany(\App\User::class);
+        return $this->hasMany(User::class);
     }
 
     /**
@@ -45,15 +45,6 @@ class Group extends Model
      */
     public function permissions()
     {
-        return $this->hasMany(\App\Permission::class);
-    }
-
-    /**
-     * Returns the requested row from the permissions table
-     *
-     */
-    public function getPermissionsByForum($forum)
-    {
-        return Permission::whereRaw('forum_id = ? AND group_id = ?', [$forum->id, $this->id])->first();
+        return $this->belongsToMany(ForumPermission::class, 'group_forum_permission');
     }
 }

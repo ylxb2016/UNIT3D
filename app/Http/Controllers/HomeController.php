@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Poll;
 use App\Article;
 use App\Group;
-use App\Topic;
+use App\ForumTopic;
 use App\Torrent;
 use App\User;
-use App\Post;
+use App\ForumPost;
 use App\FeaturedTorrent;
 use App\Mail\Contact;
 use \Toastr;
@@ -46,10 +46,13 @@ class HomeController extends Controller
         $dead = Torrent::where('seeders', 0)->latest('leechers')->take(5)->get();
 
         // Latest Topics Block
-        $topics = Topic::latest()->take(5)->get();
+        //$topics = ForumTopic::latest()->take(5)->get();
 
         // Latest Posts Block
-        $posts = Post::latest()->take(5)->get();
+        $posts = ForumPost::latest()->take(5)->get();
+
+        //ShoutBox Block
+        $shoutboxMessages = ShoutboxController::getMessages()['data'];
 
         //Online Block
         $user = User::oldest('username')->get();
@@ -61,6 +64,7 @@ class HomeController extends Controller
         //Latest Poll
         $poll = Poll::latest()->first();
 
+
         return view('home.home', [
             'user' => $user,
             'groups' => $groups,
@@ -70,11 +74,10 @@ class HomeController extends Controller
             'dying' => $dying,
             'leeched' => $leeched,
             'dead' => $dead,
-            'topics' => $topics,
             'posts' => $posts,
+            'shoutboxMessages' => $shoutboxMessages,
             'featured' => $featured,
-            'poll' => $poll,
-
+            'poll' => $poll
         ]);
     }
 

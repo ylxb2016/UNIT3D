@@ -26,7 +26,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->integer('id', true);
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('icon')->default('none');
             $table->string('meta')->default(0);
             $table->integer('num_torrent')->default(0);

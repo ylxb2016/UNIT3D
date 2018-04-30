@@ -26,7 +26,7 @@ class CreateCatalogsTable extends Migration
         Schema::create('catalogs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('num_torrent')->default(0);
             $table->timestamps();
         });
