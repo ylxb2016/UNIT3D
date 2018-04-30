@@ -7,7 +7,7 @@
  *
  * @project    UNIT3D
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
- * @author     HDVinnie
+ * @author     Poppabear
  */
 
 namespace App;
@@ -19,32 +19,13 @@ class Chatroom extends Model
 {
     use Notifiable;
 
-    protected $table = 'chatrooms';
+    protected $guarded = ['id'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name'
-    ];
-
-    /**
-     * A user can have many messages
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function messages()
     {
-        return $this->hasMany(\App\Message::class);
+        return $this->hasMany(Message::class);
     }
 
-    /**
-     * A chatroom can have many users.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function users()
     {
         return $this->hasMany(User::class);

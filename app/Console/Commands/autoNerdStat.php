@@ -32,7 +32,7 @@ class autoNerdStat extends Command
      *
      * @var string
      */
-    protected $description = 'Automatically Posts Daily Nerd Stat To Shoutbox';
+    protected $description = 'Automatically Posts Daily Nerd Stat To Chat';
 
     /**
      * Execute the console command.

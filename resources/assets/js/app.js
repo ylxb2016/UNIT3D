@@ -18,6 +18,7 @@ Vue.component('version', require('./components/Version'))
 Vue.component('latest-topics', require('./components/forums/LatestTopics'))
 Vue.component('latest-posts', require('./components/forums/LatestPosts'))
 Vue.component('forum-categories-table', require('./components/forums/ForumCategoriesTable'))
+Vue.component('chat', require('./components/chat/Chatbox'))
 
 const app = new Vue({
   el: '#app'

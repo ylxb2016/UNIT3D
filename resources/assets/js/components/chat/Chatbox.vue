@@ -12,7 +12,7 @@
                         <div class="wrap">
                             <img id="profile-img" src="/img/profile.png" class="online"
                                  alt=""/>
-                            <!--<p>HDVinnie</p>
+                            <p>HDVinnie</p>
                             <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                             <div id="status-options">
                                 <ul>
@@ -28,7 +28,7 @@
                             </div>
                             <div id="expanded">
 
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                     <div id="contacts">
@@ -42,9 +42,7 @@
                 </div>
                 <div class="content">
                     <div class="contact-profile">
-                        <chatrooms-dropdown @changechatroom="changeChatroom"
-                                            :currentchatroom='chatroom'
-                                            :chatrooms="chatrooms">
+                        <chatrooms-dropdown @changedRoom="changeRoom()">
 
                         </chatrooms-dropdown>
                     </div>
@@ -62,66 +60,42 @@
   import ChatForm from './ChatForm'
 
   export default {
-
-    data () {
-      return {
-        messages: [],
-        chatrooms: [],
-        currentChatroom: this.chatroom
+    props: {
+      user: {
+        type: Object,
+        required: true,
       }
     },
-
     components: {
       ChatroomsDropdown,
       ChatMessages,
       ChatForm
     },
-
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
-      chatroom: {
-        type: Object,
-        required: true,
+    data () {
+      return {
+        chatrooms: [],
+        room: {}
       }
     },
 
     mounted () {
-      this.fetchChatrooms()
-      this.fetchMessages()
-
-      // Echo.private('chatroom.' + this.currentChatroom.id)
-      //   .listen('MessageSent', (e) => {
-      //     this.messages.push({
-      //       message: e.message.message,
-      //       user: e.user
-      //     })
-      //   })
+      this.fetchRooms()
     },
 
     methods: {
-      fetchChatrooms () {
-        axios.get('chatbox/chatrooms').then(response => {
+      fetchRooms () {
+        axios.get('/api/chat/rooms').then(response => {
           this.chatrooms = response.data
         })
       },
-      changeChatroom (chatroom) {
-        Echo.leave('chatroom.' + this.currentChatroom.id)
-        this.currentChatroom = chatroom
 
-        axios.post('chatbox/change-chatroom', {'chatroom': chatroom}).then(response => {
+      changeRoom () {
+
+        axios.put('/api/chat/rooms/', {'id': room.id}).then(response => {
           this.fetchMessages()
-          Echo.private('chatroom.' + chatroom.id)
-            .listen('MessageSent', (e) => {
-              this.messages.push({
-                message: e.message.message,
-                user: e.user
-              })
-            })
         })
       },
+
       fetchMessages () {
         axios.get('chatbox/messages').then(response => {
           this.messages = response.data

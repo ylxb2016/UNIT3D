@@ -31,22 +31,38 @@ Route::get('/lang/{key}', function ($key) {
 
 Route::namespace('API')->group(function () {
 
+    Route::prefix('chat')->group(function () {
+
+        /* Rooms */
+        Route::get('/rooms', 'ChatController@rooms');
+        Route::post('/rooms', 'ChatController@createRoom');
+        Route::put('/rooms/{id}', 'ChatController@updateRoom');
+        Route::delete('/rooms/{id}', 'ChatController@destroyRoom');
+
+        /* Messages */
+        Route::get('/messages', 'ChatController@messages');
+        Route::post('/messages', 'ChatController@createMessage');
+        Route::put('/message/{id}', 'ChatController@updateMessage');
+        Route::delete('/messages/{id}', 'ChatController@destroyRoom');
+
+    });
+
     Route::prefix('forums')->group(function () {
 
         /* Topics */
         Route::get('/topics', 'ForumTopicsController@all');
         Route::post('/topics', 'ForumTopicsController@create');
         Route::get('/topics/{id}', 'ForumTopicsController@topic');
-        Route::post('/topics/{id}', 'ForumTopicsController@update');
-        Route::delete('/topics/{id}/delete', 'ForumTopicsController@destroy');
+        Route::put('/topics/{id}', 'ForumTopicsController@update');
+        Route::delete('/topics/{id}', 'ForumTopicsController@destroy');
         Route::get('/latest/topics/{limit?}', 'ForumTopicsController@latest');
 
         /* Posts */
         Route::get('/posts', 'ForumPostsController@all');
         Route::post('/posts', 'ForumPostsController@create');
         Route::get('/posts/{id}', 'ForumPostsController@post');
-        Route::post('/posts/{id}', 'ForumPostsController@update');
-        Route::delete('/posts/{id}/delete', 'ForumPostsController@destroy');
+        Route::put('/posts/{id}', 'ForumPostsController@update');
+        Route::delete('/posts/{id}', 'ForumPostsController@destroy');
         Route::get('/latest/posts/{limit?}', 'ForumPostsController@latest');
     });
 });

@@ -51,9 +51,6 @@ class HomeController extends Controller
         // Latest Posts Block
         $posts = ForumPost::latest()->take(5)->get();
 
-        //ShoutBox Block
-        $shoutboxMessages = ShoutboxController::getMessages()['data'];
-
         //Online Block
         $user = User::oldest('username')->get();
         $groups = Group::oldest('position')->get();
@@ -75,7 +72,6 @@ class HomeController extends Controller
             'leeched' => $leeched,
             'dead' => $dead,
             'posts' => $posts,
-            'shoutboxMessages' => $shoutboxMessages,
             'featured' => $featured,
             'poll' => $poll
         ]);

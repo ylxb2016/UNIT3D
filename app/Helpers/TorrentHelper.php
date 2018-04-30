@@ -294,7 +294,7 @@ class TorrentHelper
             $user->addProgress(new UserMade900Uploads(), 1);
         }
 
-        // Announce To Shoutbox
+        // Announce To Chat
         if ($anon == 0) {
             Message::create(['user_id' => "1", 'chatroom_id' => "1", 'message' => "User [url={$appurl}/" . $username . "." . $user_id . "]" . $username . "[/url] has uploaded [url={$appurl}/torrents/" . $slug . "." . $id . "]" . $torrent->name . "[/url] grab it now! :slight_smile:"]);
         } else {

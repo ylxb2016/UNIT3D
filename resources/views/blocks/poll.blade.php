@@ -1,7 +1,7 @@
 @if($poll && $poll->voters->where('user_id', auth()->user()->id)->isEmpty())
     <div class="col-md-10 col-sm-10 col-md-offset-1">
         <div class="clearfix visible-sm-block"></div>
-        <div class="panel panel-chat shoutbox">
+        <div class="panel panel-chat">
             <div class="panel-heading">
                 <h4>Latest Poll ({{ $poll->title }}) (Vote Now!)</h4>
             </div>

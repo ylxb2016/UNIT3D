@@ -207,9 +207,9 @@ class UserController extends Controller
                 $recieved->reciever_id = 1;
                 $recieved->save();
             }
-            // Removes all Posts made by User from the shoutbox
-            foreach (Message::where('user_id', $user->id)->get() as $shout) {
-                $shout->delete();
+            // Removes all Posts made by User from the chat
+            foreach (Message::where('user_id', $user->id)->get() as $message) {
+                $message->delete();
             }
             // Removes all notes for user
             foreach (Note::where('user_id', $user->id)->get() as $note) {

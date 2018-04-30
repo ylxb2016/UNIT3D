@@ -1,1 +1,4 @@
-<chatbox :chatroom="{{ auth()->user()->chatroom }}" :user="{{ auth()->user() }}"></chatbox>
+<chat :chatroom="{{ auth()->user()->chatroom }}"
+      :user="{{ auth()->user() }}">
+
+</chat>

@@ -269,15 +269,6 @@ Route::group(['middleware' => 'language'], function () {
         Route::any('/notification/delete/{id}', 'NotificationController@delete')->name('delete_notification');
         Route::any('/notification/delete', 'NotificationController@deleteAll')->name('delete_notifications');
 
-
-        // Shoutbox
-        Route::prefix('shoutbox')->group(function () {
-            Route::get('/', 'HomeController@home')->name('shoutbox-home');
-            Route::get('/messages/{after?}', 'ShoutboxController@pluck')->name('shoutbox-fetch');
-            Route::post('/send', 'ShoutboxController@send')->name('shoutbox-send');
-            Route::get('/delete/{id}', 'ShoutboxController@deleteShout')->name('shout-delete');
-        });
-
         // Forums
         Route::prefix('forums')->group(function () {
             // Display Forum Index
