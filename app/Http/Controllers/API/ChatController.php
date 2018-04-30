@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Chatroom;
 use App\Http\Resources\ChatMessageResource;
 use App\Http\Resources\ChatRoomResource;
+use App\Http\Resources\UserResource;
 use App\Message;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,13 +17,15 @@ class ChatController extends Controller
     /* MAIN CHAT ENDPOINT */
     public function chat($id)
     {
-        return new ChatRoomResource(Chatroom::with(['users', 'messages'])->find($id));
+        $room = Chatroom::with(['messages.user'])->find($id);
+
+        return new ChatRoomResource($room);
     }
 
     /* ROOMS */
     public function rooms()
     {
-        return ChatRoomResource::collection(Chatroom::all()->pluck('name'));
+        return response(Chatroom::select(['id', 'name'])->get(), 200);
     }
 
     public function createRoom(Request $request)
@@ -58,6 +62,23 @@ class ChatController extends Controller
     }
 
     /* MESSAGES */
+    public function roomMessages($id)
+    {
+        $room = ChatRoom::find($id);
+
+        if ($room->messages->count() > 100) {
+            $room->messages()->oldest()->first()->delete();
+        }
+
+        $messages = $room->messages()
+            ->with('user')
+            ->latest()
+            ->limit(100)
+            ->get();
+
+        return ChatMessageResource::collection($messages);
+    }
+
     public function messages()
     {
         return ChatMessageResource::collection(Message::all());
@@ -65,9 +86,7 @@ class ChatController extends Controller
 
     public function createMessage(Request $request)
     {
-        return new ChatMessageResource(Message::create([
-            'message' => $request->get('message')
-        ]));
+        return new ChatMessageResource(Message::create($request->all()));
     }
 
     public function updateMessage(Request $request, $id)
@@ -88,5 +107,24 @@ class ChatController extends Controller
         $message->delete();
 
         return response(['success' => 'Successfully removed chat room!'], 200);
+    }
+
+    /* USERS */
+    public function userRoom($id)
+    {
+        return User::with('chatroom')->find($id);
+    }
+
+    public function updateUserRoom(Request $request, $id)
+    {
+        $user = User::with('chatroom')->findOrFail($id);
+        $room = Chatroom::findOrFail($request->get('room_id'));
+
+        $user->chatroom()->dissociate();
+        $user->chatroom()->associate($room);
+
+        $user->save();
+
+        return response($user, 200);
     }
 }

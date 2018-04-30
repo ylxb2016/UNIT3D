@@ -661,6 +661,7 @@ button.list-group-item {
 
 .form-control {
   background-color: #222222;
+  color: #c0c0c0 !important;
 }
 
 .breadcrumb {

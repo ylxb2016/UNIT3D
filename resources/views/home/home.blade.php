@@ -5,7 +5,7 @@
         @include('blocks.news')
 
         @if(!auth()->user()->chat_hidden)
-            @include('blocks.chat')
+            <chat :force-scroll="true" :user="{{ App\User::with('chatroom')->find(auth()->id()) }}"></chat>
         @endif
 
         @include('blocks.featured')
