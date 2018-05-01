@@ -14,7 +14,7 @@
         </td>
         <td class="text-center">{{ forum.posts_count }}</td>
         <td class="text-center">{{ forum.topics_count }}</td>
-        <td class="text-center">
+        <td>
             Last Message - author
             <i class="fa fa-user"></i>
 
@@ -32,7 +32,7 @@
 
             <br>
 
-            <i class="fa fa-clock-o"></i> {{ forum.updated_at }}
+            <i class="fa fa-clock-o"></i> {{ forum.created_at }}
         </td>
     </tr>
 </template>

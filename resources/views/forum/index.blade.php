@@ -19,16 +19,6 @@
 
 @section('content')
     <div class="box container">
-
-        <form role="form" method="POST" action="{{ route('forum_search') }}">
-            {{ csrf_field() }}
-
-            <input type="text" name="name" id="name"
-                   placeholder="{{ trans('forum.topic-quick-search') }}"
-                   class="form-control">
-        </form>
-
         <forum-categories-table :categories="{{ $categories }}"></forum-categories-table>
-
     </div>
 @endsection

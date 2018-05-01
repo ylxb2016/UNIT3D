@@ -12,12 +12,18 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Forum extends Model
 {
 
-    protected $appends = ['posts_count', 'topics_count'];
+    protected $appends = [
+        'posts_count',
+        'topics_count',
+        'last_post_username',
+        'last_topic_name'
+    ];
 
     protected $guarded = ['id'];
 
@@ -49,5 +55,20 @@ class Forum extends Model
     public function getTopicsCountAttribute()
     {
         return $this->topics()->count();
+    }
+
+    public function getLastPostUsernameAttribute()
+    {
+        return $this->posts()->latest()->first()->user->username;
+    }
+
+    public function getLastTopicNameAttribute()
+    {
+        return $this->topics()->latest()->first()->name;
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $this->asDateTime($value)->diffForHumans(Carbon::now());
     }
 }

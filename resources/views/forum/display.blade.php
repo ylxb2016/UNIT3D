@@ -35,63 +35,7 @@
                 </p>
             </div>
             <div class="f-display-table-wrapper col-md-12">
-                <table class="f-display-topics table col-md-12">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>{{ trans('forum.topic') }}</th>
-                        <th>{{ trans('forum.author') }}</th>
-                        <th>{{ trans('forum.stats') }}</th>
-                        <th>{{ trans('forum.last-post-info') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($topics as $t)
-                        <tr>
-                            @if($t->pinned == 0)
-                                <td class="f-display-topic-icon"><img src="{{ url('img/f_icon_read.png') }}"></td>
-                            @else
-                                <td class="f-display-topic-icon"><span class="text-green"><i
-                                                class="fa fa-thumb-tack fa-2x"></i></span></td>
-                            @endif
-                            <td class="f-display-topic-title">
-                                <strong><a href="{{ route('forum_topic', array('slug' => $t->slug, 'id' => $t->id)) }}">{{ $t->name }}</a></strong>
-                                @if($t->state == "close") <span
-                                        class='label label-sm label-default'>{{ strtoupper(trans('forum.closed')) }}</span> @endif
-                                @if($t->approved == "1") <span
-                                        class='label label-sm label-success'>{{ strtoupper(trans('forum.approved')) }}</span> @endif
-                                @if($t->denied == "1") <span
-                                        class='label label-sm label-danger'>{{ strtoupper(trans('forum.denied')) }}</span> @endif
-                                @if($t->solved == "1") <span
-                                        class='label label-sm label-info'>{{ strtoupper(trans('forum.solved')) }}</span> @endif
-                                @if($t->invalid == "1") <span
-                                        class='label label-sm label-warning'>{{ strtoupper(trans('forum.invalid')) }}</span> @endif
-                                @if($t->bug == "1") <span
-                                        class='label label-sm label-danger'>{{ strtoupper(trans('forum.bug')) }}</span> @endif
-                                @if($t->suggestion == "1") <span
-                                        class='label label-sm label-primary'>{{ strtoupper(trans('forum.suggestion')) }}</span> @endif
-                                @if($t->implemented == "1") <span
-                                        class='label label-sm label-success'>{{ strtoupper(trans('forum.implemented')) }}</span> @endif
-                            </td>
-                            <td class="f-display-topic-started"><a
-                                        href="{{ route('profile', ['username' => $t->first_post_user_username, 'id' => $t->first_post_user_id]) }}">{{ $t->first_post_user_username }}</a>
-                            </td>
-                            <td class="f-display-topic-stats">
-                                {{ $t->num_post - 1 }} {{ trans('forum.replies') }}
-                                \ {{ $t->views }} {{ trans('forum.views') }}
-                            </td>
-                            @php $last_post = DB::table('posts')->where('topic_id', '=', $t->id)->orderBy('id', 'desc')->first(); @endphp
-                            <td class="f-display-topic-last-post">
-                                <a href="{{ route('profile', ['username' => $t->last_post_user_username, 'id' => $t->last_post_user_id]) }}">{{ $t->last_post_user_username }}</a>
-                                on
-                                <time datetime="{{ date('M d Y', strtotime($last_post->created_at)) }}">
-                                    {{ date('M d Y', strtotime($last_post->created_at)) }}
-                                </time>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                {{-- NEED TO RE-THINK THIS WHOLE APPROACH --}}
             </div>
             <div class="f-display-pagination col-md-12">
                 {{ $topics->links() }}

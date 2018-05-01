@@ -1,5 +1,11 @@
 <template>
     <div class="forum-categories">
+
+        <input type="text"
+               v-model="search"
+               placeholder="Start typing here to filter ..."
+               class="form-control">
+
         <forum-category v-for="category in categories" :key="category.id" :name="category.name">
 
             <table class="table table-bordered table-hover table-responsive">
@@ -31,6 +37,11 @@
     name: 'forum-categories-table',
     props: {
       categories: {required: true}
+    },
+    data() {
+      return {
+        search: '',
+      }
     },
     components: {
       ForumCategory,

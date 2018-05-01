@@ -184,7 +184,7 @@ class User extends Authenticatable
     */
     public function topics()
     {
-        return $this->hasManyThrough(ForumTopic::class, ForumPost::class);
+        return $this->hasMany(ForumTopic::class);
     }
 
     /**

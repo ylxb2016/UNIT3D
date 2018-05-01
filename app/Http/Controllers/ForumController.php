@@ -48,43 +48,19 @@ class ForumController extends Controller
      * @var ForumCategory
      */
     private $category;
-    /**
-     * @var Forum
-     */
-    private $forum;
-    /**
-     * @var ForumPermission
-     */
-    private $permission;
-    /**
-     * @var ForumTopic
-     */
-    private $topic;
-    /**
-     * @var ForumPost
-     */
-    private $post;
 
     public function __construct(
         TaggedUserRepository $tag,
-        ForumCategory $category,
-        Forum $forum,
-        ForumPermission $permission,
-        ForumTopic $topic,
-        ForumPost $post
+        ForumCategory $category
     ) {
         $this->tag = $tag;
         $this->category = $category;
-        $this->forum = $forum;
-        $this->permission = $permission;
-        $this->topic = $topic;
-        $this->post = $post;
     }
 
     public function index()
     {
         $categories = $this->category
-            ->with('forums')
+            ->with(['forums'])
             ->withCount(['forums', 'topics', 'posts'])
             ->oldest('pos')
             ->get();
