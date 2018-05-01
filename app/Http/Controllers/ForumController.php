@@ -120,13 +120,8 @@ class ForumController extends Controller
     {
         // Find the topic
         $forum = Forum::findOrFail($id);
-        // Check if this is a category or forum
-        if ($forum->parent_id == 0) {
-            return redirect()->route('forum_category', ['slug' => $forum->slug, 'id' => $forum->id]);
-        }
-        $category = Forum::findOrFail($forum->parent_id);
-        // Check if the user has permission to view the forum
-        if ($category->getPermission()->show_forum != true) {
+
+        if (auth()->user()->cannot('show_forum')) {
             return redirect()->route('forum_index')->with(Toastr::error('You Do Not Have Access To This Forum!',
                 'Whoops!', ['options']));
         }

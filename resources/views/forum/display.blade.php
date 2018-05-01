@@ -15,7 +15,7 @@
         </a>
     </li>
     <li>
-        <a href="{{ route('forum_display', array('slug' => $forum->slug, 'id' => $forum->id)) }}" itemprop="url"
+        <a href="{{ route('forum_display', ['slug' => $forum->slug, 'id' => $forum->id]) }}" itemprop="url"
            class="l-breadcrumb-item-link">
             <span itemprop="title" class="l-breadcrumb-item-link-title">{{ $forum->name }}</span>
         </a>
@@ -23,13 +23,13 @@
 @endsection
 
 @section('content')
-    <div class="container box">
+    <div class="box container">
         <div class="f-display">
             <div class="f-display-info col-md-12">
                 <h1 class="f-display-info-title">{{ $forum->name }}</h1>
                 <p class="f-display-info-description">{{ $forum->description }}
-                    @if($category->getPermission()->start_topic == true)
-                        <a href="{{ route('forum_new_topic', array('slug' => $forum->slug, 'id' => $forum->id)) }}"
+                    @if(auth()->user()->can('start_topic'))
+                        <a href="{{ route('forum_new_topic', ['slug' => $forum->slug, 'id' => $forum->id]) }}"
                            class="btn btn-primary" style="float:right;">{{ trans('forum.create-new-topic') }}</a>
                     @endif
                 </p>

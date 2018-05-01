@@ -8,7 +8,6 @@
     <meta name="description" content="{{ config('other.title') }} - {{ trans('forum.forums') }}">
 @endsection
 
-
 @section('breadcrumb')
     <li class="active">
         <a href="{{ route('forum_index') }}" itemprop="url" class="l-breadcrumb-item-link">
