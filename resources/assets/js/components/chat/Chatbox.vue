@@ -37,7 +37,9 @@
                     </div>
 
                     <div id="bottom-bar">
-                        <button id="channels"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></button>
+                        <button id="channels">
+                            <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="content">
@@ -45,6 +47,7 @@
                     <div class="contact-profile">
                         <chatrooms-dropdown :current="auth.chatroom.id"
                                             :chatrooms="chatrooms"
+                                            class="pull-left"
                                             @changedRoom="changeRoom">
 
                         </chatrooms-dropdown>
@@ -67,7 +70,6 @@
 
   export default {
     props: {
-      forceScoll: {type: Boolean, default: false},
       user: {
         type: Object,
         required: true,
@@ -86,10 +88,9 @@
         chatrooms: [],
         currentRoom: 1,
         room: {},
-        scrolled: false
+        scroll: true
       }
     },
-    computed: {},
     methods: {
       statusChanged (status) {
         this.status = status
@@ -127,55 +128,48 @@
       },
 
       createMessage (message) {
-        this.room.messages.push(message)
-
         axios.post('/api/chat/messages', {
           'user_id': this.auth.id,
           'chatroom_id': this.currentRoom,
           'message': message.message
+        }).then(response => {
+          this.fetchMessages()
         })
-
       },
+
+      scrollToBottom () {
+        let messages = $('.messages .list-group')
+
+        if (this.scroll) {
+          messages.animate({scrollTop: messages.prop('scrollHeight')}, 0)
+        }
+
+        messages.scroll(() => {
+          this.scroll = false
+
+          let scrollTop = messages.scrollTop() + messages.prop('clientHeight')
+          let scrollHeight = messages.prop('scrollHeight')
+
+          this.scroll = scrollTop >= scrollHeight
+        })
+      }
     },
     created () {
       this.auth = this.user
 
       this.fetchRooms()
       this.changeRoom(this.auth.chatroom.id)
+      this.fetchMessages()
+      this.scrollToBottom()
 
       setInterval(() => {
         this.fetchMessages()
-
-        let messages = $('.messages .list-group')
-
-        messages.animate({scrollTop: messages.prop('scrollHeight')}, 0)
-
-        messages.scroll(() => {
-          this.forceScroll = false
-
-          let scrollTop = messages.scrollTop() + messages.prop('clientHeight')
-          let scrollHeight = messages.prop('scrollHeight')
-
-          this.forceScroll = scrollTop >= scrollHeight
-        })
-
       }, 3000)
+
+      setInterval(() => {
+        this.scrollToBottom()
+      }, 100)
+
     },
   }
 </script>
-
-<style lang="scss" scoped>
-    .panel-chat {
-
-        #profile .wrap {
-            height: 60px;
-            line-height: 60px;
-            overflow: visible !important;
-
-            .statuses {
-                padding-top: 55px;
-            }
-        }
-
-    }
-</style>

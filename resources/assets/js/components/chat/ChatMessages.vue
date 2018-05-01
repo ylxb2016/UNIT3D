@@ -25,7 +25,7 @@
 					</span>
 
                     <span class="text-muted">
-                        <small><em>1 hour ago</em></small>
+                        <small><em>{{ message.created_at }}</em></small>
                     </span>
 
                 </h4>
@@ -41,19 +41,3 @@
     props: ['messages']
   }
 </script>
-
-<style lang="scss" scoped>
-    .messages {
-
-        ul {
-            margin-left: 20px;
-            height: 580px;
-            overflow-y: auto;
-
-            li {
-                padding: 10px;
-                border: 1px #e5e5e5 dashed;
-            }
-        }
-    }
-</style>
