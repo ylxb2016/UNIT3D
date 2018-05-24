@@ -103,13 +103,29 @@ class UserController extends Controller
     {
         $user = auth()->user();
         // Avatar
-        if ($request->hasFile('image')) {
+        $max_upload = config('image.max_upload_size');
+        if ($request->hasFile('image') && $request->file('image')->getError() == 0) {
             $image = $request->file('image');
-            if (in_array($image->getClientOriginalExtension(), ['jpg', 'JPG', 'jpeg', 'bmp', 'png', 'PNG', 'tiff', 'gif', 'GIF']) && preg_match('#image/*#', $image->getMimeType())) {
-                $filename = $user->username . '.' . $image->getClientOriginalExtension();
-                $path = public_path('/files/img/' . $filename);
-                Image::make($image->getRealPath())->fit(150, 150)->save($path);
-                $user->image = $user->username . '.' . $image->getClientOriginalExtension();
+            if (in_array($image->getClientOriginalExtension(), ['jpg', 'JPG', 'jpeg', 'bmp', 'png', 'PNG', 'tiff', 'gif']) && preg_match('#image/*#', $image->getMimeType())) {
+                if ($max_upload >= $image->getSize()) {
+                    $filename = $user->username . '.' . $image->getClientOriginalExtension();
+                    $path = public_path('/files/img/' . $filename);
+                    if ($image->getClientOriginalExtension() != 'gif') {
+                        Image::make($image->getRealPath())->fit(150, 150)->encode('png', 100)->save($path);
+                    } else {
+                        $v = validator($request->all(), [
+                            'image' => 'dimensions:ratio=1/1'
+                        ]);
+                        if ($v->passes()) {
+                            $image->move(public_path('/files/img/'), $filename);
+                        } else {
+                            return redirect()->route('profile', ['username' => $user->username, 'id' => $user->id])->with(Toastr::error('Because you are uploading a GIF, your avatar must be symmetrical!', 'Whoops!', ['options']));
+                        }
+                    }
+                    $user->image = $user->username . '.' . $image->getClientOriginalExtension();
+                } else {
+                    return redirect()->route('profile', ['username' => $user->username, 'id' => $user->id])->with(Toastr::error('Your avatar is too large, max file size: ' . ($max_upload / 1000000) . ' MB', 'Whoops!', ['options']));
+                }
             }
         }
         // Define data
@@ -167,6 +183,7 @@ class UserController extends Controller
         $user->peer_hidden = $request->input('peer_hidden');
 
         // Torrent Settings
+        $user->torrent_layout = (int)$request->input('torrent_layout');
         $user->show_poster = $request->input('show_poster');
         $user->ratings = $request->input('ratings');
 
@@ -347,7 +364,12 @@ class UserController extends Controller
             $warning->save();
 
             // Send Private Message
-            PrivateMessage::create(['sender_id' => $staff->id, 'reciever_id' => $warning->user_id, 'subject' => "Hit and Run Warning Deactivated", 'message' => $staff->username . " has decided to deactivate your warning for torrent " . $warning->torrent . " You lucked out! [color=red][b]THIS IS AN AUTOMATED SYSTEM MESSAGE, PLEASE DO NOT REPLY![/b][/color]"]);
+            $pm = new PrivateMessage;
+            $pm->sender_id = $staff->id;
+            $pm->receiver_id = $warning->user_id;
+            $pm->subject = "Hit and Run Warning Deactivated";
+            $pm->message = $staff->username . " has decided to deactivate your warning for torrent " . $warning->torrent . " You lucked out! [color=red][b]THIS IS AN AUTOMATED SYSTEM MESSAGE, PLEASE DO NOT REPLY![/b][/color]";
+            $pm->save();
 
             // Activity Log
             \LogActivity::addToLog("Staff Member {$staff->username} has deactivated a warning on {$warning->warneduser->username} account.");
