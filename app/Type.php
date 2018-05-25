@@ -35,7 +35,7 @@ class Type extends Model
      */
     public function torrents()
     {
-        return $this->hasMany(\App\Torrent::class);
+        return $this->hasMany(Torrent::class);
     }
 
     /**
@@ -44,6 +44,15 @@ class Type extends Model
      */
     public function requests()
     {
-        return $this->hasMany(\App\TorrentRequest::class);
+        return $this->hasMany(TorrentRequest::class);
+    }
+
+    /**
+     * Has many recipes
+     *
+     */
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class);
     }
 }

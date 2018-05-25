@@ -121,6 +121,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Has many torrents
+     *
+     */
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class);
+    }
+
+    /**
      * Has send many pms
      *
      */

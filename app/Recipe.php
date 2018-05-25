@@ -14,34 +14,32 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Recipe extends Model
 {
-    public $timestamps = false;
-
     /**
-     * Has many torrents
-     *
+     * Belongs To A User
      */
-    public function torrents()
+    public function user()
     {
-        return $this->hasMany(Torrent::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'username' => 'System',
+            'id' => '1'
+        ]);
     }
 
     /**
-     * Has many requests
-     *
+     * Belongs To A Category
      */
-    public function requests()
+    public function category()
     {
-        return $this->hasMany(TorrentRequest::class);
+        return $this->belongsTo(Category::class);
     }
 
     /**
-     * Has many recipes
-     *
+     * Belongs To A Type
      */
-    public function recipes()
+    public function type()
     {
-        return $this->hasMany(Recipe::class);
+        return $this->belongsTo(Type::class);
     }
 }
