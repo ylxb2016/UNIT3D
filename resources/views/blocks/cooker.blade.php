@@ -3,7 +3,7 @@
     <div class="clearfix visible-sm-block"></div>
     <div class="panel panel-chat shoutbox">
         <div class="panel-heading">
-            <h4>The Cooker
+            <h4>The Cooker (Upcoming Internal Uploads)
                 @if(auth()->user()->group->is_internal || auth()->user()->group->is_modo)
                     <button class="btn btn-xs btn-default" style="float:right" data-toggle="modal"
                             data-target="#modal_add_recipe"><i class="fa fa-plus"></i>Add Recipe
@@ -11,76 +11,90 @@
                 @endif
             </h4>
         </div>
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Recipe Name</th>
-                    <th>Expected</th>
-                    <th>Chef</th>
-                    <th>Status</th>
-                    <th>Notify</th>
-                </tr>
-                </thead>
-                <tbody>
-                @if(count($recipes) == 0)
-                    <div class="text-center"><h4 class="text-bold text-danger"><i
-                                    class="fa fa-frown-o"></i> Nothing In The Cooker!</h4>
-                    </div>
-                @else
+        @if(count($recipes) == 0)
+            <div class="text-center">
+                <h4 class="text-bold text-danger">
+                    <i class="fa fa-frown-o"></i> Nothing In The Cooker!
+                </h4>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table table-condensed table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Recipe Name</th>
+                        <th>Chef</th>
+                        <th>Status</th>
+                        <th>Notify</th>
+                        @if(auth()->user()->group->is_internal || auth()->user()->group->is_modo)
+                        <th>Action</th>
+                        @endif
+                    </tr>
+                    </thead>
+                    <tbody>
                     @foreach($recipes as $recipe)
                         <tr>
-                            <td><span class="label label-success">{{ $recipe->category }}</span></td>
+                            <td><span class="label label-success">{{ $recipe->category->name }}</span></td>
                             <td><span class="label label-info">{{ $recipe->type }}</span></td>
                             <td><a href="#">{{ $recipe->name }}</a></td>
-                            <td>{{ $recipe->expected }}</td>
-                            <td>{{ $recipe->chef->username }}</td>
+                            <td>{{ $recipe->user->username }}</td>
                             <td>{{ $recipe->status }}</td>
-                            @if()
-                                <td>
-                                    <button class="btn btn-xs btn-info"><i class="fa fa-bell"></i> Notify Me!</button>
-                                </td>
-                            @else
+                            {{--}}@if()--}}
+                            <td>
+                                <button class="btn btn-xs btn-info"><i class="fa fa-bell"></i> Notify Me!</button>
+                            </td>
+                            {{--}}@else
                                 <td>
                                     <button class="btn btn-xs btn-danger"><i class="fa fa-bell-slash-o"></i> Unnotify
                                         Me!
                                     </button>
                                 </td>
+                            @endif--}}
+                            @if(auth()->user()->group->is_internal || auth()->user()->group->is_modo)
+                                <td>
+                                    <a href="{{ route('updateRecipe', ['id' => $recipe->id]) }}"
+                                       class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{{ route('destroyRecipe', ['id' => $recipe->id]) }}"
+                                       class="btn btn-xs btn-danger"><i class="fa fa-times"></i> Delete</a>
+                                </td>
                             @endif
                         </tr>
                     @endforeach
-                @endif
-                </tbody>
-            </table>
-        </div>
+                    @endif
+                    </tbody>
+                </table>
+            </div>
     </div>
 </div>
 {{-- /END Add Recipe Block --}}
 
 {{-- Add Recipe Modal --}}
-<div class="modal fade" id="modal_add_recipe" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="modal_add_recipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <meta charset="utf-8">
-            <title>Add New Recipe</title>
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('common.close') }}"><span
-                            aria-hidden="true">×</span></button>
-                <h4 class="modal-title"
-                    id="myModalLabel">Add New Recipe</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add A New Recipe</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" method="POST" action="{{ route('postRecipe') }}">
+                <form class="form-horizontal" role="form" method="POST" action="{{ route('storeRecipe') }}">
+                    {{ csrf_field() }}
                     <div class="form-group">
-                        <label for="name">Title</label>
-                        <input type="text" name="name" id="title" class="form-control" required>
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="name">IMDB ID <b>(Required)</b></label>
+                        <label for="imdb">IMDB ID <b>(Required)</b></label>
                         <input type="number" name="imdb" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tmdb">TMDB ID <b>(Required)</b></label>
+                        <input type="number" name="tmdb" class="form-control" required>
                     </div>
 
                     <div class="form-group">
@@ -100,17 +114,27 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <div class="col-sm-10 col-sm-offset-2">
-                            <input class="btn btn-primary" type="submit" value="{{ trans('common.add') }}">
-                        </div>
+                        <label for="status">Status</label>
+                        <select name="status" class="form-control">
+                            <option value="Sourcing">Sourcing</option>
+                            <option value="Encoding">Encoding</option>
+                            <option value="Remuxing">Remuxing</option>
+                            <option value="Ripping">Ripping</option>
+                            <option value="FTP'ing">FTP'ing</option>
+                            <option value="Uploaded">Uploaded</option>
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="upload-form-description" name="description" cols="30" rows="10"
+                                  class="form-control"></textarea>
+                    </div>
+                        <input type="submit" value="{{ trans('common.add') }}" class="btn btn-primary">
                 </form>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-sm btn-default" type="button"
-                    data-dismiss="modal">{{ trans('common.close') }}</button>
         </div>
     </div>
 </div>

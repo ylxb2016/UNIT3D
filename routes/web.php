@@ -273,6 +273,11 @@ Route::group(['middleware' => 'language'], function () {
         Route::get('/notification/massread', 'NotificationController@massRead')->name('massRead_notifications');
         Route::get('/notification/delete/{id}', 'NotificationController@delete')->name('delete_notification');
         Route::get('/notification/delete', 'NotificationController@deleteAll')->name('delete_notifications');
+
+        // Recipe System
+        Route::post('/recipe/store', 'RecipeController@store')->name('storeRecipe');
+        Route::post('/recipe/update/{id}', 'RecipeController@update')->name('updateRecipe');
+        Route::get('/recipe/destroy/{id}', 'RecipeController@destroy')->name('destroyRecipe');
     });
 
     /*

@@ -12,8 +12,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use App\Poll;
 use App\Article;
 use App\Group;
@@ -22,15 +22,16 @@ use App\Torrent;
 use App\User;
 use App\Post;
 use App\FeaturedTorrent;
+use App\Type;
+use App\Recipe;
 use \Toastr;
 
 class HomeController extends Controller
 {
     /**
-     * Home page
+     * Home Page
      *
-     * @access public
-     * @return View home.home
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function home()
     {
@@ -60,6 +61,9 @@ class HomeController extends Controller
         //Latest Poll
         $poll = Poll::latest()->first();
 
+        //Latest Recipes
+        $recipes = Recipe::latest()->take(5)->get();
+
         return view('home.home', [
             'user' => $user,
             'groups' => $groups,
@@ -73,7 +77,9 @@ class HomeController extends Controller
             'posts' => $posts,
             'featured' => $featured,
             'poll' => $poll,
-
+            'recipes' => $recipes,
+            'types' => Type::all(),
+            'categories' => Category::all()
         ]);
     }
 }
