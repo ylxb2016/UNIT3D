@@ -44,6 +44,26 @@ class User extends Authenticatable
     protected $dates = ['last_login'];
 
     /**
+     * Belongs To Many Roles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    /**
+     * Belongs To Many Privileges
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function privileges()
+    {
+        return $this->belongsToMany(Privilege::class, 'user_privileges', 'user_id', 'privilege_id');
+    }
+
+    /**
      * Belongs To A Group
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
