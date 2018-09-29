@@ -25,12 +25,12 @@ class CreateUserPrivilegesTable extends Migration
     {
         Schema::create('user_privileges', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('role_id');
+            $table->unsignedInteger('user_id');
             $table->unsignedInteger('privilege_id');
 
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('privilege_id')->references('id')->on('privileges')->onDelete('cascade');
-            $table->unique(['role_id', 'privilege_id']);
+            $table->unique(['user_id', 'privilege_id']);
 
             $table->timestamps();
         });
