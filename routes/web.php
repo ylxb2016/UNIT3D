@@ -298,6 +298,10 @@ Route::group(['middleware' => 'language'], function () {
         Route::post('/addimage', 'ImageController@add')->name('add_image_to_album');
         Route::get('/deleteimage/{id}', 'ImageController@destroy')->name('delete_image');
         Route::get('/image/download/{id}', 'ImageController@download')->name('image_download');
+
+        // Pool System
+        Route::get('/pool', 'PoolController@index')->name('pool');
+        Route::get('/pool/contribute', 'PoolController@store')->name('contribute');
     });
 
     /*
