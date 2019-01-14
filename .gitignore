@@ -4,7 +4,9 @@
 # Laravel
 
 # Ignore everything in the public/files directory EXCEPT the .gitkeep
-/public/files
+/public/files/img
+/public/files/tmp
+/public/files/torrents
 !.gitkeep
 
 /public/hot

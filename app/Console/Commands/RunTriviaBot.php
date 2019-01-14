@@ -118,6 +118,7 @@ class RunTriviaBot extends Command
                 $question->save();
 
                 //send the question and hint/answer to channel
+                sleep(2);
                 $message = "{$questiontext}\n{$hint}";
                 $bot->sendMessageToChannel($message);
             } else {

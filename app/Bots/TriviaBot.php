@@ -64,6 +64,8 @@ class TriviaBot
 
         $game->started = 1;
         $game->save();
+
+        \Artisan::call('run:trivia_bot');
     }
 
     /**
