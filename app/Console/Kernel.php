@@ -48,6 +48,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\AutoSoftDeleteDisabledUsers::class,
         \App\Console\Commands\AutoRecycleClaimedTorrentRequests::class,
         \App\Console\Commands\AutoCorrectHistory::class,
+        \App\Console\Commands\RunTriviaBot::class,
 
         // Manually Run Commands
         \App\Console\Commands\DemoSeed::class,
