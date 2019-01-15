@@ -66,44 +66,57 @@ class TriviaBotListener
             {
                 switch ($command[1]) {
                     case "load":
-                        if (!$command[2]) {
-                            $bot->sendMessageToChannel(":interrobang: You forgot to tell me what file to load, silly!");
-                        } elseif (!$command[3] || $command[3] == "false") {
-                            $loaded = $bot->load($command[2]);
-                            $bot->sendMessageToChannel($loaded);
+                        if($player->user->group->is_modo) {
+                            if (!$command[2]) {
+                                $bot->sendMessageToChannel(":interrobang: You forgot to tell me what file to load, silly!");
+                            } elseif (!$command[3] || $command[3] == "false") {
+                                $loaded = $bot->load($command[2]);
+                                $bot->sendMessageToChannel($loaded);
+                            } else {
+                                $loaded = $bot->load($command[2], true);
+                                $bot->sendMessageToChannel($loaded);
+                            }
                         } else {
-                            $loaded = $bot->load($command[2], true);
-                            $bot->sendMessageToChannel($loaded);
+                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: {$player_name}, you dont have the authoritah to do that!");
                         }
                         break;
                     case "start":
-                        //start the bot
-                        if (!$bot->started()) {
-                            $bot->start();
-                            $bot->sendMessageToChannel(":sunglasses: Thanks {$player_name}, I was getting bored! Trivia is coming up in 5 minutes! I have announced upcoming game in General Channel as well.");
-                            $bot->announceUpcomingGame(":sunglasses: My dudes. {$player_name} has just initiated a trivia game! Trivia is coming up in 5 minutes! Come on over to the Trivia Channel.");
+                        if($player->user->group->is_modo) {
+                            //start the bot
+                            if (!$bot->started()) {
+                                $bot->start();
+                                $bot->announceUpcomingGame(":sunglasses: My dudes. {$player_name} has just initiated a trivia game! Trivia is coming up in 5 minutes! Come on over to the Trivia Channel.");
+                                $bot->sendMessageToChannel(":sunglasses: Thanks {$player_name}, I was getting bored! Trivia is coming up in 5 minutes! I have announced upcoming game in General Channel as well.");
+                            } else {
+                                $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: Pay attention {$player_name}, we're already playing trivia!");
+                            }
                         } else {
-                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: Pay attention {$player_name}, we're already playing trivia!");
+                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: {$player_name}, you dont have the authoritah to do that!");
                         }
                         break;
                     case "stop":
-                        if (!$bot->started()) {
-                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: We're not even playing trivia {$player_name}! (Type *!trivia start* if you want to play)");
-                        } else {
-                            $question = $bot->getCurrentQuestion();
-                            $event->message = ":rotating_light: Game stopped by [b]{$player_name}[/b]";
-                            if (!$question || $question->current_hint == 1) {
-                                $game->started = 0;
-                                $game->stopping = 0;
-                                $game->save();
+                        if($player->user->group->is_modo) {
+                            if (!$bot->started()) {
+                                $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: We're not even playing trivia {$player_name}! (Type *!trivia start* if you want to play)");
                             } else {
-                                $event->message .= " _but I've started so I'll finish..._";
-                                $bot->stop();
+                                $question = $bot->getCurrentQuestion();
+                                $event->message = ":rotating_light: Game stopped by [b]{$player_name}[/b]";
+                                if (!$question || $question->current_hint == 1) {
+                                    $game->started = 0;
+                                    $game->stopping = 0;
+                                    $game->save();
+                                } else {
+                                    $event->message .= " _but I've started so I'll finish..._";
+                                    $bot->stop();
+                                }
+                                $bot->sendMessageToChannel($event->message);
                             }
-                            $bot->sendMessageToChannel($event->message);
+                        } else {
+                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: {$player_name}, you dont have the authoritah to do that!");
                         }
                         break;
                     case "delay":
+                        if($player->user->group->is_modo) {
                         {
                             if (!$command[2] || !is_numeric($command[2])) {
                                 $bot->sendMessageToChannel(":interrobang: You forgot to tell me how long to set the delay!");
@@ -119,6 +132,9 @@ class TriviaBotListener
                                 $bot->sendMessageToChannel("Delay set to {$delay} seconds between hints.");
                             }
 
+                        }
+                        } else {
+                            $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: {$player_name}, you dont have the authoritah to do that!");
                         }
                     case "questions":
                         $total = $bot->get_total_questions();
@@ -188,17 +204,26 @@ class TriviaBotListener
                         $event->message .= "Total number of questions answered: [b]" . number_format($player->questions_answered) . "[/b]\n";
                         $bot->sendMessageToChannel(":ok_hand: " . $event->message);
                         break;
+                    case "exchange_rates":
+                        $event->message = "[b]Exchange Rate Information[/b]:\n";
+                        $event->message .= "1 Freeleech Token: [b]Costs 1000 Points[/b]\n";
+                        $event->message .= "[b]Exchanging Is Disabled At Moment. More Options Are Being Added.[/b]\n";
+                        $bot->sendMessageToChannel(":information_source: " . $event->message);
+                        break;
                     case "help":
                         //send the help text to the channel
                         $helpText = "The options available are...\n";
-                        $helpText .= "*!trivia start / !trivia stop* - starts or stops the game.\n";
-                        $helpText .= "*!trivia delay [n]* - set the minimum time between hints in seconds.\n";
-
-                        $helpText .= "*!trivia scores / !trivia runs* - shows the top 3 high scorers / best runs.\n";
+                        $helpText .= "*!trivia start  - starts the game. (STAFF ONLY)\n";
+                        $helpText .= "*!trivia stop - starts the game. (STAFF ONLY)\n";
+                        $helpText .= "*!trivia load  - loads new question set to database. (STAFF ONLY)\n";
+                        $helpText .= "*!trivia delay [n]* - set the minimum time between hints in seconds. (STAFF ONLY)\n";
+                        $helpText .= "*!trivia exchange_rates - shows what you can exchange your points for.\n";
+                        $helpText .= "*!trivia scores - shows the top 3 high scorers.\n";
+                        $helpText .= "*!trivia runs - shows the top 3 best runs.\n";
                         $helpText .= "*!trivia questions* - shows how many questions are loaded\n";
                         $helpText .= "*!trivia answers* - shows the top 3 players by questions answered\n";
                         $helpText .= "*!trivia me* - get details on your own scoring.\n";
-                        $helpText .= "*!trivia seen [player]* - says when the player last typed something in channel\n";
+                        $helpText .= "*!trivia seen [player]* - says when the player last typed something in channel. (NOT WORKING)\n";
                         $bot->sendMessageToChannel($helpText);
                         break;
 
@@ -250,6 +275,7 @@ class TriviaBotListener
                         $totalscore = number_format($player->current_score);
                         $event->message = "YES! [b]{$player_name}[/b] that's {$player->current_run} in a row. You scored {$score} points bringing your total for the month to {$totalscore}!\n";
                         $event->message .= "The answer was [b]{$player_text}[/b]!\n";
+                        $event->message .= "Next question coming up...";
                         $bot->sendMessageToChannel(":clap: " . $event->message);
                         $game->questions_without_reply = 0;
                         if (($game->stopping == 1)) {
