@@ -30,7 +30,6 @@ class TriviaBot
      */
     private $bot_id;
 
-
     /**
      * TriviaBot Constructor.
      *
@@ -38,7 +37,7 @@ class TriviaBot
      */
     public function __construct()
     {
-        $this->channel = 2; //Trivia
+        $this->channel = config('chat.trivia_chatroom'); //Trivia
         $this->bot_id = 2; //Bot Account
     }
 

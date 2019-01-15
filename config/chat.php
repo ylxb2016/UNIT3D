@@ -48,4 +48,16 @@ return [
 
     'nerd_bot' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Which chatroom should trivia messages be routed to ?
+    |--------------------------------------------------------------------------
+    |
+    | Note: You MUST use the ID of your Trivia chatroom
+    | id (integer) example: 2
+    |
+    */
+
+    'trivia_chatroom' => '2',
+
 ];
