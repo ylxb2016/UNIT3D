@@ -12,15 +12,17 @@
 
 namespace App\Listeners;
 
+use App\Game;
+use Exception;
+use App\Player;
 use App\Bots\TriviaBot;
 use App\Events\MessageSent;
-use Exception;
-use App\Game;
-use App\Player;
-use Carbon\Carbon;
 
 class TriviaBotListener
 {
+    /**
+     * @param MessageSent $event
+     */
     public function handle(MessageSent $event)
     {
         if ($event->message->chatroom_id == 2) {

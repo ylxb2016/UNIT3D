@@ -13,11 +13,10 @@
 namespace App\Bots;
 
 use App\Game;
+use App\Message;
 use App\Question;
 use App\QuestionSet;
-use App\Message;
 use App\Events\MessageSent;
-use Carbon\Carbon;
 
 class TriviaBot
 {
@@ -32,6 +31,11 @@ class TriviaBot
     private $bot_id;
 
 
+    /**
+     * TriviaBot Constructor.
+     *
+     * @param Toastr $toastr
+     */
     public function __construct()
     {
         $this->channel = 2; //Trivia
@@ -46,7 +50,7 @@ class TriviaBot
     {
         $game = Game::first();
         if (!$game) {
-            $game = Game::create(["started" => 0, "stopping" => 0, "delay" => 20, "last_asked" => Carbon::now()]);
+            $game = Game::create(["started" => 0, "stopping" => 0, "delay" => 20, "last_asked" => time()]);
         }
 
         //set all questions to OFF
@@ -245,6 +249,9 @@ class TriviaBot
         $this->channel = $channel;
     }
 
+    /**
+     * @return bool
+     */
     public function started()
     {
         $game = Game::first();

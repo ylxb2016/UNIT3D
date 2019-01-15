@@ -12,10 +12,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Bots\TriviaBot;
 use App\Game;
-use Carbon\Carbon;
+use App\Bots\TriviaBot;
+use Illuminate\Console\Command;
 
 class RunTriviaBot extends Command
 {
@@ -42,7 +41,7 @@ class RunTriviaBot extends Command
     {
         $bot = new TriviaBot();
         $game = Game::where('started', '=', 1)->first();
-        $timestamp = Carbon::now();
+        $timestamp = time();
         if (!$game) {
             $bot->start();
         }
@@ -71,8 +70,8 @@ class RunTriviaBot extends Command
                         }
                         $previousLetter = $letter;
                     }
-                } //show first 3 letters of first word
-                elseif ($question->current_hint == 2) {
+                } elseif ($question->current_hint == 2) {
+                    //show first 3 letters of first word
                     foreach ($letters as $key => $letter) {
                         if ($previousLetter == " " || $letter == " " || stripos("abcdefghijklmnopqrstuvwxyz1234567890", $letter) === false || $key <= 2) {
                             $hint .= $letter;
@@ -81,8 +80,8 @@ class RunTriviaBot extends Command
                         }
                         $previousLetter = $letter;
                     }
-                } //show all vowels
-                elseif ($question->current_hint == 3) {
+                } elseif ($question->current_hint == 3) {
+                    //show all vowels
                     foreach ($letters as $key => $letter) {
                         if ($previousLetter == " " || $letter == " " || stripos("abcdefghijklmnopqrstuvwxyz1234567890", $letter) === false || $key <= 2 || stripos("aeiou", $letter) > -1) {
                             $hint .= $letter;
@@ -91,8 +90,8 @@ class RunTriviaBot extends Command
                         }
                         $previousLetter = $letter;
                     }
-                } else //by this time we just want to see the answer - no more clues!
-                {
+                } else {
+                    //by this time we just want to see the answer - no more clues!
                     $questiontext = "";
                     $hint = "[b]Nobody got it![/b] The answer was [b][i]{$answer}[/i][/b]";
 
@@ -109,7 +108,8 @@ class RunTriviaBot extends Command
                     } else {
                         $hint .= "\nNext question coming up...";
                         //set up the next question
-                        $bot->start(); //this sets a random question's current_hint to 1
+                        //this sets a random question's current_hint to 1
+                        $bot->start();
                     }
                 }
                 $game->save();
@@ -118,7 +118,6 @@ class RunTriviaBot extends Command
                 $question->save();
 
                 //send the question and hint/answer to channel
-                sleep(2);
                 $message = "{$questiontext}\n{$hint}";
                 $bot->sendMessageToChannel($message);
             } else {
