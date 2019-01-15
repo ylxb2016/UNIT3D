@@ -213,6 +213,23 @@ class TriviaBot
     }
 
     /**
+     * @param string $message
+     *
+     */
+    public function announceUpcomingGame($message)
+    {
+        $message = Message::create([
+            'user_id' => $this->getBotID(),
+            'chatroom_id' => 1,
+            'message' => $message
+        ]);
+
+        broadcast(new MessageSent($message));
+
+        return $message;
+    }
+
+    /**
      * @return mixed
      *
      */

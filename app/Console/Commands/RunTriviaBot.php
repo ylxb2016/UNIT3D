@@ -13,6 +13,7 @@
 namespace App\Console\Commands;
 
 use App\Game;
+use Carbon\Carbon;
 use App\Bots\TriviaBot;
 use Illuminate\Console\Command;
 
@@ -41,7 +42,7 @@ class RunTriviaBot extends Command
     {
         $bot = new TriviaBot();
         $game = Game::where('started', '=', 1)->first();
-        $timestamp = time();
+        $timestamp = Carbon::now();
         if (!$game) {
             $bot->start();
         }

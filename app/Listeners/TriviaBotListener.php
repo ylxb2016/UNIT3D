@@ -12,9 +12,11 @@
 
 namespace App\Listeners;
 
+use App\User;
 use App\Game;
 use Exception;
 use App\Player;
+use Carbon\Carbon;
 use App\Bots\TriviaBot;
 use App\Events\MessageSent;
 
@@ -38,7 +40,7 @@ class TriviaBotListener
             $player_id = $event->message->user_id;
             $player_name = $event->message->user->username;
             $player_text = $event->message->message;
-            $player_channel = 2;
+            $player_channel = config('chat.trivia_chatroom');
             $timestamp = time();
             $player = Player::where('user_id', '=', $player_id)->first();
             if (!$player) {
@@ -78,7 +80,8 @@ class TriviaBotListener
                         //start the bot
                         if (!$bot->started()) {
                             $bot->start();
-                            $bot->sendMessageToChannel(":sunglasses: Thanks {$player_name}, I was getting bored! More trivia coming up!");
+                            $bot->sendMessageToChannel(":sunglasses: Thanks {$player_name}, I was getting bored! Trivia is coming up in 5 minutes! I have announced upcoming game in General Channel as well.");
+                            $bot->announceUpcomingGame(":sunglasses: My dudes. {$player_name} has just initiated a trivia game! Trivia is coming up in 5 minutes! Come on over to the Trivia Channel.");
                         } else {
                             $bot->sendMessageToChannel(":stuck_out_tongue_winking_eye: Pay attention {$player_name}, we're already playing trivia!");
                         }
@@ -118,7 +121,7 @@ class TriviaBotListener
 
                         }
                     case "questions":
-                        $total = number_format($bot->get_total_questions());
+                        $total = $bot->get_total_questions();
                         $bot->sendMessageToChannel("[b]{$player_name}[/b]: there are [b]{$total}[/b] questions loaded in the database.");
                         break;
                     case "seen":
@@ -126,13 +129,14 @@ class TriviaBotListener
                             $bot->sendMessageToChannel(" :interrobang: You forgot to tell me who you're looking for!");
                         } else {
                             $seen_name = trim($command[2]);
-                            $seen_player = Player::find('first', ['name' => $seen_name]);
-                            $now = time();
+                            $user = User::where('username', 'like', $seen_name)->first();
+                            $seen_player = Player::where('user_id', '=', $user->id)->first();
+                            $now = Carbon::now();
                             if (!$seen_player) {
                                 $event->message = "Sorry, {$player_name}, I've never seen {$seen_name}!";
                             } else {
-                                $diff = number_format($now - $seen_player->last_seen);
-                                $event->message = "Hey {$player_name}, I last saw {$seen_name} [b]{$diff}[/b] seconds ago!";
+                                $diff = $now->toDateTimeString() - $seen_player->last_seen;
+                                $event->message = "Hey {$player_name}, I last saw {$seen_name} [b]{$diff->diffForHumans()}[/b] seconds ago!";
                             }
                             $bot->sendMessageToChannel($event->message);
 
@@ -246,6 +250,7 @@ class TriviaBotListener
                         $totalscore = number_format($player->current_score);
                         $event->message = "YES! [b]{$player_name}[/b] that's {$player->current_run} in a row. You scored {$score} points bringing your total for the month to {$totalscore}!\n";
                         $event->message .= "The answer was [b]{$player_text}[/b]!\n";
+                        $bot->sendMessageToChannel(":clap: " . $event->message);
                         $game->questions_without_reply = 0;
                         if (($game->stopping == 1)) {
                             $question->current_hint = 0;
@@ -258,7 +263,6 @@ class TriviaBotListener
                             $bot->start();
                         }
                         $game->save();
-                        $bot->sendMessageToChannel(":clap: " . $event->message);
                     }
                 }
             }
