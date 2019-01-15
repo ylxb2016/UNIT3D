@@ -25,7 +25,7 @@ class TriviaBotListener
      */
     public function handle(MessageSent $event)
     {
-        if ($event->message->chatroom_id == 2) {
+        if ($event->message->chatroom_id == config('chat.trivia_chatroom')) {
             $bot = new TriviaBot();
             $game = Game::first();
             if (!$game) {
@@ -56,9 +56,11 @@ class TriviaBotListener
 
             $bot->setChannel($player_channel);
 
-            $command = explode(" ", $player_text); //each word is a token for the command
+            //each word is a token for the command
+            $command = explode(" ", $player_text);
 
-            if ($command[0] == "!trivia") //commands start with !trivia
+            //commands start with !trivia
+            if ($command[0] == "!trivia")
             {
                 switch ($command[1]) {
                     case "load":
